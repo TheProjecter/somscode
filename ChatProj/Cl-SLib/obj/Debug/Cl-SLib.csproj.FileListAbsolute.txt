@@ -1,0 +1,7 @@
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\bin\Debug\Cl-SLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\bin\Debug\Cl-SLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\bin\Debug\ChatLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\bin\Debug\ChatLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\obj\Debug\Cl-SLib.csprojResolveAssemblyReference.cache
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\obj\Debug\Cl-SLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\obj\Debug\Cl-SLib.pdb
