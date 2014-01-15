@@ -24,11 +24,11 @@ namespace WindowsFormsApplication1
             {
                 ConnectionDialog getIp = new ConnectionDialog();
                 getIp.Show();
-                manager = new MessageManager("client1", getIp.ip, viewMessBox);
+                manager = new MessageManager("clientExt", getIp.ip, viewMessBox);
             }
             else
             {
-                manager = new MessageManager("client0", "", viewMessBox);
+                manager = new MessageManager("clientLoc", "", viewMessBox);
             }
         }
         #region Events
