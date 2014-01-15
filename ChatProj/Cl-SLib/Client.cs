@@ -47,11 +47,11 @@ namespace ClientServerLib
         // The response from the remote device.
         private String response = String.Empty;
         #endregion
-        public AsynchronousClient(int loc, string ipAddr)
+        public AsynchronousClient(string ipAddr)
         {
             //Establish the remote endpoint for the socket.
             string ip = GetExternalIP();
-            if (ip != null & loc!=0)
+            if (ipAddr == "" & ip!=null)
             {
                 ipAddress = IPAddress.Parse(ip);
             }

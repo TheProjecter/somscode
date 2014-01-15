@@ -18,13 +18,13 @@ namespace ClientServerLib
         public MessageManager(string mode, string ip, object _interfaceObj)
         {
             interfaceObj = _interfaceObj;
-            if (mode == "client0")
+            if (mode == "clientLoc")
             {
-                socketObj = new AsynchronousClient(0, ip);
+                socketObj = new AsynchronousClient(ip);
             }
-            if (mode == "client1")
+            if (mode == "clientExt")
             {
-                socketObj = new AsynchronousClient(1, ip);
+                socketObj = new AsynchronousClient(ip);
             }
             if (mode == "serv")
             {
