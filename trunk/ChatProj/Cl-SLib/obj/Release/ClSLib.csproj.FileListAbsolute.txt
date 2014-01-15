@@ -1,0 +1,4 @@
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\bin\Release\Cl-SLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\bin\Release\Cl-SLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\obj\Release\Cl-SLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\obj\Release\Cl-SLib.pdb

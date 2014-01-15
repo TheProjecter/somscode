@@ -1,0 +1,6 @@
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\TestClient\bin\Debug\TestClient.exe.config
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\TestClient\bin\Debug\TestClient.exe
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\TestClient\bin\Debug\TestClient.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\TestClient\obj\Debug\TestClient.exe
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\TestClient\obj\Debug\TestClient.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\TestClient\obj\Debug\TestClient.csprojResolveAssemblyReference.cache
