@@ -4,6 +4,5 @@ C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplicatio
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\WindowsFormsApplication1\Cl-SLib\obj\Release\Cl-SLib.pdb
 C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\bin\Release\Cl-SLib.dll
 C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\bin\Release\Cl-SLib.pdb
-C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\obj\Release\ClSLib.csprojResolveAssemblyReference.cache
 C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\obj\Release\Cl-SLib.dll
 C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\obj\Release\Cl-SLib.pdb
