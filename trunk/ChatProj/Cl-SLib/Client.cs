@@ -51,21 +51,15 @@ namespace ClientServerLib
         {
             //Establish the remote endpoint for the socket.
             string ip = GetExternalIP();
-            if (ipAddr == "" & ip!=null)
+            if (ipAddr != "")
             {
-                ipAddress = IPAddress.Parse(ip);
+                ipAddress = IPAddress.Parse(ipAddr);
+
             }
             else
             {
-                if (ipAddr == "")
-                {
-                    ipHostInfo = Dns.Resolve(Dns.GetHostName());
-                    ipAddress = ipHostInfo.AddressList[0];
-                }
-                else
-                {
-                    ipAddress = IPAddress.Parse(ipAddr);
-                }
+                ipHostInfo = Dns.Resolve(Dns.GetHostName());
+                ipAddress = ipHostInfo.AddressList[0];
             }
             remoteEP = new IPEndPoint(ipAddress, port);
 

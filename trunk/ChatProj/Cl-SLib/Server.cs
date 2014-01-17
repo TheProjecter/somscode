@@ -217,7 +217,7 @@ namespace ClientServerLib
                 user.socket.BeginReceive(user.RecBuffer, 0, user.RecBuffer.Length, 0,
                     new AsyncCallback(ReceiveCallback), user);
 
-                MessageManager.ShowMessage(user.Login + "Вошел в чат");
+                MessageManager.ShowMessage(user.Login + "Вошел в чат\r");
                 SendSystemMessage("Вошел в чат", user);
 
                 connectDone.Set();
