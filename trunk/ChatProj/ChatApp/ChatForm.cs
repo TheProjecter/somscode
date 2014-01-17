@@ -20,10 +20,10 @@ namespace WindowsFormsApplication1
         public ChatForm()
         {
             InitializeComponent();
-            if (MessageBox.Show("Желаете ввести ip сервера?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.OK)
+            if (MessageBox.Show("Желаете ввести ip сервера?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 ConnectionDialog getIp = new ConnectionDialog();
-                getIp.Show();
+                getIp.ShowDialog();
                 manager = new MessageManager("clientExt", getIp.ip, viewMessBox);
             }
             else
