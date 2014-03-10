@@ -6,3 +6,8 @@ C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\bin\Release\Cl-SLib.dll
 C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\bin\Release\Cl-SLib.pdb
 C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\obj\Release\Cl-SLib.dll
 C:\Users\Viacheslav\Desktop\ChatProj\Cl-SLib\obj\Release\Cl-SLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\Cl-SLib\bin\Release\Cl-SLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\Cl-SLib\bin\Release\Cl-SLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\Cl-SLib\obj\Release\Cl-SLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\Cl-SLib\obj\Release\Cl-SLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\Cl-SLib\obj\Release\ClSLib.csprojResolveAssemblyReference.cache

@@ -45,7 +45,7 @@ namespace WindowsFormsApplication1
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -57,28 +57,15 @@ namespace WindowsFormsApplication1
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void writeMessBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Thread thr = new Thread(SendTest);
-                thr.Start();
-                //writeMessBox.Clear();
-            }
-        }
-
-        private void SendTest()
-        {
-            int i = 0;
-            while (i <= 100)
-            {
-                //MessageManager.SendMessage(writeMessBox.Text.ToString() + "$");
-                MessageManager.SendMessage("testmessage " + i.ToString() + "\r$");
-                Thread.Sleep(10);
-                i++;
+                MessageManager.SendMessage(writeMessBox.Text + "$");
+                writeMessBox.Clear();
             }
         }
         #endregion
