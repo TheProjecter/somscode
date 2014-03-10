@@ -1,0 +1,13 @@
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\bin\x86\Debug\WindowsFormsApplication1.exe.config
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\bin\x86\Debug\WindowsFormsApplication1.exe
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\bin\x86\Debug\WindowsFormsApplication1.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\bin\x86\Debug\Cl-SLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\bin\x86\Debug\Cl-SLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\obj\x86\Debug\TestMainForms.csprojResolveAssemblyReference.cache
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\obj\x86\Debug\WindowsFormsApplication1.ChatForm.resources
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\obj\x86\Debug\WindowsFormsApplication1.ConnectionDialog.resources
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\obj\x86\Debug\WindowsFormsApplication1.ServerForm.resources
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\obj\x86\Debug\TestMainForms.csproj.GenerateResource.Cache
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\obj\x86\Debug\WindowsFormsApplication1.exe
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\ChatProj\ChatApp\obj\x86\Debug\WindowsFormsApplication1.pdb
