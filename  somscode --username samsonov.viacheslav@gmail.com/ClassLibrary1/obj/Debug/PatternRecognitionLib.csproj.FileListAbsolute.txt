@@ -1,4 +1,0 @@
-C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\ClassLibrary1\obj\Debug\ClassLibrary1.dll
-C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\ClassLibrary1\bin\Debug\ClassLibrary1.dll
-C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\ClassLibrary1\bin\Debug\ClassLibrary1.pdb
-C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\ClassLibrary1\obj\Debug\ClassLibrary1.pdb
