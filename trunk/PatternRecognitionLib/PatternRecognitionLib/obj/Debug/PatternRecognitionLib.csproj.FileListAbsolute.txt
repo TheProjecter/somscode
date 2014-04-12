@@ -1,0 +1,4 @@
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\PatternRecognitionLib\bin\Debug\PatternRecognitionLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\PatternRecognitionLib\bin\Debug\PatternRecognitionLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\PatternRecognitionLib\obj\Debug\PatternRecognitionLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\PatternRecognitionLib\obj\Debug\PatternRecognitionLib.pdb
