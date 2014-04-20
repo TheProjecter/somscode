@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternRecognitionLib", "PatternRecognitionLib\PatternRecognitionLib.csproj", "{A9969389-1ECB-4D98-A47E-56D9E60DBCAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIProj", "UIProj\UIProj.csproj", "{C000210F-1DCD-424F-A36D-71A831EDF008}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A9969389-1ECB-4D98-A47E-56D9E60DBCAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9969389-1ECB-4D98-A47E-56D9E60DBCAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9969389-1ECB-4D98-A47E-56D9E60DBCAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C000210F-1DCD-424F-A36D-71A831EDF008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C000210F-1DCD-424F-A36D-71A831EDF008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C000210F-1DCD-424F-A36D-71A831EDF008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C000210F-1DCD-424F-A36D-71A831EDF008}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

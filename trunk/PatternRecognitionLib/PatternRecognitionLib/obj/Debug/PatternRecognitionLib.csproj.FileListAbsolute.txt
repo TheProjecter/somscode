@@ -4,6 +4,5 @@ C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionLib\PatternRecognitionLib\obj\Debug\PatternRecognitionLib.pdb
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\PatternRecognitionLib\bin\Debug\PatternRecognitionLib.dll
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\PatternRecognitionLib\bin\Debug\PatternRecognitionLib.pdb
-C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\PatternRecognitionLib\obj\Debug\PatternRecognitionLib.csprojResolveAssemblyReference.cache
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\PatternRecognitionLib\obj\Debug\PatternRecognitionLib.dll
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\PatternRecognitionLib\obj\Debug\PatternRecognitionLib.pdb
