@@ -21,6 +21,7 @@ namespace UIProj
         private void button1_Click(object sender, EventArgs e)
         {
             LinRule rule = new LinRule();
+            rule.BuildRules();
         }
     }
 }
