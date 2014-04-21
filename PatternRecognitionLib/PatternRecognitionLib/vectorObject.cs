@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,18 +37,32 @@ namespace PatternRecognitionLib
             }
             get { return n; }
         }
-        public void Zero()
+        public double Norm()
         {
+            double tmp = 0;
             for (int i = 0; i < n; i++)
             {
-                coords[i] = 0;
+                tmp += coords[i] * coords[i];
             }
+            tmp = Math.Sqrt(tmp);
+            return tmp;
+        }
+        public vectorObject Normalized()
+        {
+            vectorObject tmp = this;
+            double norm = Norm();
+            for (int i = 0; i < n; i++)
+            {
+                tmp[i] = tmp[i] / norm;
+            }
+            return tmp;
         }
         public double this[int Xn]
         {
             get { return coords[Xn]; }
             set { coords[Xn] = value; }
         }
+        #region Операторы
         public static double operator *(vectorObject v1, vectorObject v2)
         {
             double tmp = 0;
@@ -75,7 +90,7 @@ namespace PatternRecognitionLib
             vectorObject tmp = v1;
             for (int i = 0; i < v1.n; i++)
             {
-                tmp[i] += v2[i];
+                tmp[i] = v1[i] + v2[i];
             }
             return tmp;
         }
@@ -84,10 +99,11 @@ namespace PatternRecognitionLib
             vectorObject tmp = v1;
             for (int i = 0; i < v1.n; i++)
             {
-                tmp[i] -= v2[i];
+                tmp[i] = v1[i] - v2[i];
             }
             return tmp;
         }
+        
     //    public static bool operator ==(vectorObject v1, vectorObject v2)
     //    {
     //        int count = 0;
@@ -107,6 +123,7 @@ namespace PatternRecognitionLib
     //        }
     //        if (count == v1.n) return false;
     //        return true;
-    //    }
+        //    }
+        #endregion
     }
 }
