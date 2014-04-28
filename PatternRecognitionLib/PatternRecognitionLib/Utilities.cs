@@ -4,15 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 using System.IO;
 
 namespace PatternRecognitionLib
 {
     public class Utilities
     {
-        public static Image[] ReadTask()
+        static public Image[] ReadTask()
         {
-            Image[] img;
+            return Parser.ReadTask();
+        }
+        static public void WriteTask(Image[] imgs)
+        {
+            Parser.WriteTask(imgs);
+        }
+    }
+    class Parser
+    {
+        static public Image[] ReadTask()
+        {
+            Image[] imgs;
             OpenFileDialog of = new OpenFileDialog();
             of.Title = "Выберите файл";
             of.Filter = "Текстовые файлы|*.txt";
@@ -21,12 +33,12 @@ namespace PatternRecognitionLib
             {
                 TextReader tr = new StreamReader(of.FileName);
                 int n = Int32.Parse(NextString(tr));
-                img = new Image[n];
+                imgs = new Image[n];
                 for (int i = 0; i < n; i++)
                 {
                     string tmp = NextString(tr);
                     string[] objs = tmp.Split(';');
-                    img[i] = new Image(objs.Count() - 1);
+                    imgs[i] = new Image(objs.Count() - 1);
                     for (int j = 0; j < objs.Count() - 1; j++)
                     {
                         string[] coords = objs[j].Split(',');
@@ -35,22 +47,49 @@ namespace PatternRecognitionLib
                         {
                             crds[k] = Double.Parse(coords[k]);
                         }
-                        img[i][j] = new vectorObject(crds);
+                        imgs[i][j] = new vectorObject(crds);
                     }
                 }
-                return img;
+                tr.Close();
+                return imgs;
             }
 
             return null;
         }
-        private static string NextString(TextReader tr)
+        static private string NextString(TextReader tr)
         {
             string tmp = tr.ReadLine();
-            if (tmp.IndexOf('/')>-1)
+            if (tmp.IndexOf('/') > -1)
             {
                 tmp = NextString(tr);
             }
             return tmp;
         }
+        static public void WriteTask(Image[] imgs)
+        {
+            if (imgs != null)
+            {
+                SaveFileDialog sf = new SaveFileDialog();
+                sf.Title = "Выберите файл";
+                sf.Filter = "Текстовые файлы|*.txt";
+
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    TextWriter tw = new StreamWriter(sf.FileName);
+                    tw.WriteLine("//число образов");
+                    tw.WriteLine(imgs.Count());
+                    for(int i=0; i<imgs.Count(); i++)
+                    {
+                        tw.WriteLine("//image" + (i + 1));
+                        tw.WriteLine(imgs[i].ToString());
+                    }
+                    tw.Close();
+                }
+            }
+        }
+    }
+
+    class Drawer
+    {
     }
 }

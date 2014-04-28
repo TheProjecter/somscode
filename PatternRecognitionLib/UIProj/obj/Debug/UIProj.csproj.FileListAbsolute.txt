@@ -9,3 +9,4 @@ C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.csproj.GenerateResource.Cache
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.exe
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.ConfigForm.resources

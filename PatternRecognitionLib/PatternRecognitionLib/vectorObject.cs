@@ -25,6 +25,11 @@ namespace PatternRecognitionLib
             coords = _coords;
             n = coords.Count();
         }
+        public vectorObject(vectorObject v)
+        {
+            coords = v.coords;
+            n = v.n;
+        }
         public int Size
         {
             set
@@ -40,21 +45,26 @@ namespace PatternRecognitionLib
         public double Norm()
         {
             double tmp = 0;
+
             for (int i = 0; i < n; i++)
             {
-                tmp += coords[i] * coords[i];
+                tmp = tmp + (coords[i] * coords[i]);
             }
             tmp = Math.Sqrt(tmp);
+
             return tmp;
         }
         public vectorObject Normalized()
         {
-            vectorObject tmp = this;
-            double norm = Norm();
+            vectorObject tmp = new vectorObject(this.coords);
+
+            double norm = tmp.Norm();
+
             for (int i = 0; i < n; i++)
             {
                 tmp[i] = tmp[i] / norm;
             }
+
             return tmp;
         }
         public double this[int Xn]
@@ -69,14 +79,14 @@ namespace PatternRecognitionLib
 
             for (int i = 0; i < v1.n; i++)
             {
-                tmp += v1[i] * v2[i];
+                tmp = tmp + (v1[i] * v2[i]);
             }
 
             return tmp;
         }
         public static vectorObject operator *(double alpha, vectorObject v)
         {
-            vectorObject tmp = v;
+            vectorObject tmp = new vectorObject(v.n);
 
             for (int i = 0; i < v.n; i++)
             {
@@ -87,7 +97,7 @@ namespace PatternRecognitionLib
         }
         public static vectorObject operator +(vectorObject v1, vectorObject v2)
         {
-            vectorObject tmp = v1;
+            vectorObject tmp = new vectorObject(v1.n);
             for (int i = 0; i < v1.n; i++)
             {
                 tmp[i] = v1[i] + v2[i];
@@ -96,11 +106,27 @@ namespace PatternRecognitionLib
         }
         public static vectorObject operator -(vectorObject v1, vectorObject v2)
         {
-            vectorObject tmp = v1;
+            vectorObject tmp = new vectorObject(v1.n);
+
             for (int i = 0; i < v1.n; i++)
             {
                 tmp[i] = v1[i] - v2[i];
             }
+            return tmp;
+        }
+        public string ToString()
+        {
+            string tmp = "";
+
+            for(int i=0; i<n; i++)
+            {
+                if (i != 0)
+                {
+                    tmp += ",";
+                }
+                tmp += coords[i];
+            }
+
             return tmp;
         }
         

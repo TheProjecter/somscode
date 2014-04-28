@@ -19,28 +19,35 @@ namespace PatternRecognitionLib
             x0 = X[0]; 
             y0 = Y[0]; 
         }
-        public void BuildRule()
+        public void BuildRule(double gamma, double omega)
         {
             while (true)
             {
+                vectorObject xp = new vectorObject(x0.Size);
+                vectorObject yq = new vectorObject(y0.Size);
+
+                FindMaxPrs(ref xp, ref yq);
+                
                 vectorObject x1 = new vectorObject(x0.Size);
                 vectorObject y1 = new vectorObject(y0.Size);
-                FindMinLength(ref x1, ref y1);
+                
+                FindMinLength(ref xp, ref yq, ref x1, ref y1);
                 w = FindHyperplane(x1, y1);
-                if (IsSeparating(0.1))
+                if (IsSeparating(omega))
                 {
                     if (IsRightPlane(x1, y1))
                     {
-                        if (StoppingCriterion(x1, y1, 0.9))
+                        if (StoppingCriterion(x1, y1, gamma))
                         {
                             break;
                         }
                     }
-                    else
-                    {
-                        x0 = x1;
-                        y0 = y1;
-                    }
+                    x0 = x1;
+                    y0 = y1;
+                }
+                else
+                {
+                    break;
                 }
             }
         }
@@ -48,25 +55,25 @@ namespace PatternRecognitionLib
         //Поиск Xp и Yq
         private void FindMaxPrs(ref vectorObject xp, ref vectorObject yq)
         {
-            vectorObject[] tmp = new vectorObject[2];
             double max = 0;
+
             for(int i=0; i<X.Count; i++)
             {
-                tmp[0] = X[i];
-                if ((xp - x0) * (y0 - x0) > max)
+                if ((X[i] - x0) * (y0 - x0) > max)
                 {
-                    max = (xp - x0) * (y0 - x0);
-                    xp = tmp[0];
+                    max = (X[i] - x0) * (y0 - x0);
+                    xp = X[i];
                 }
             }
+
             max = 0;
+
             for (int i = 0; i < Y.Count; i++)
             {
-                tmp[1] = Y[i];
-                if ((yq - y0) * (x0 - y0) > max)
+                if ((Y[i] - y0) * (x0 - y0) > max)
                 {
-                    max = (xp - x0) * (y0 - x0);
-                    yq = tmp[1];
+                    max = (Y[i] - y0) * (x0 - y0);
+                    yq = Y[i];
                 }
             }
         }
@@ -157,11 +164,9 @@ namespace PatternRecognitionLib
         }
 
         //Поиск минимального расстояния между прямыми xp-x0 и yq-y0
-        private void FindMinLength(ref vectorObject x1, ref vectorObject y1)
+        private void FindMinLength(ref vectorObject xp, ref vectorObject yq, 
+                                    ref vectorObject x1, ref vectorObject y1)
         {
-            vectorObject xp = new vectorObject(x1.Size);
-            vectorObject yq = new vectorObject(y1.Size);
-            FindMaxPrs(ref xp, ref yq);
             double l1 = 0;
             double l2 = 0;
 
@@ -174,8 +179,9 @@ namespace PatternRecognitionLib
         //Поиск гиперплоскости
         private vectorObject FindHyperplane(vectorObject x1, vectorObject y1)
         {
-            vectorObject w = x1 - y1;
-            return w.Normalized();
+            vectorObject _w = new vectorObject(x1.Size);
+            _w = x1 - y1;
+            return _w.Normalized();
         }
         
         //Проверка является ли гиперплоскость разделяющей
@@ -202,20 +208,20 @@ namespace PatternRecognitionLib
         //Критерий останова
         private bool StoppingCriterion(vectorObject x1, vectorObject y1, double gamma)
         {
-            double p = (x1 - y1).Norm();
-            double min = (w * X[0]) / w.Norm();
+            double p = Math.Abs((x1 - y1).Norm());
+            double min = Math.Abs((w * X[0]) / w.Norm());
             for (int i = 0; i < X.Count; i++)
             {
-                if ((w * X[i]) / w.Norm() < min)
+                if (Math.Abs((w * X[i]) / w.Norm()) < min)
                 {
-                    min = (w * X[i]) / w.Norm();
+                    min = Math.Abs((w * X[i]) / w.Norm());
                 }
             }
             for (int i = 0; i < Y.Count; i++)
             {
-                if ((w * Y[i]) / w.Norm() < min)
+                if (Math.Abs((w * Y[i]) / w.Norm()) < min)
                 {
-                    min = (w * Y[i]) / w.Norm();
+                    min = Math.Abs((w * Y[i]) / w.Norm());
                 }
             }
 
@@ -228,12 +234,12 @@ namespace PatternRecognitionLib
     public class LinRule
     {
         List<MinMaxRule> mxRuleList = new List<MinMaxRule>();
-        public LinRule()
+
+        public LinRule(Image[] imgs)
         {
-            Image[] imgs = Utilities.ReadTask();
-            for(int i=0; i<imgs.Count(); i++)
+            for (int i = 0; i < imgs.Count(); i++)
             {
-                for (int j=i+1; j<imgs.Count(); j++)
+                for (int j = i + 1; j < imgs.Count(); j++)
                 {
                     MinMaxRule rl = new MinMaxRule(imgs[i], imgs[j]);
                     mxRuleList.Add(rl);
@@ -241,11 +247,11 @@ namespace PatternRecognitionLib
             }
         }
 
-        public void BuildRules()
+        public void BuildRules(double gamma, double omega)
         {
             foreach(MinMaxRule rule in mxRuleList)
             {
-                rule.BuildRule();
+                rule.BuildRule(gamma, omega);
             }
         }
     }
