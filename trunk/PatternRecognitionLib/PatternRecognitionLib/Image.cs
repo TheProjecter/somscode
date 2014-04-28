@@ -33,5 +33,16 @@ namespace PatternRecognitionLib
                 }
             }
         }
+
+        public string ToString()
+        {
+            string tmp = "";
+
+            for (int i = 0; i < count; i++)
+            {
+                tmp += objects[i].ToString()+";";
+            }
+            return tmp;
+        }
     }
 }
