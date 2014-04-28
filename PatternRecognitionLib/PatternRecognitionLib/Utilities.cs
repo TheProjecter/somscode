@@ -9,8 +9,10 @@ using System.IO;
 
 namespace PatternRecognitionLib
 {
+    //Класс мэнеджер вспомогательных классов
     public class Utilities
     {
+        #region Фунции работы с файлами
         static public Image[] ReadTask()
         {
             return Parser.ReadTask();
@@ -19,7 +21,23 @@ namespace PatternRecognitionLib
         {
             Parser.WriteTask(imgs);
         }
+        #endregion
+        #region Функции работы с графикой
+        static public void SetCanva(object canva, bool UseDefaultCellSize, int cellNum=0)
+        {
+            Drawer.SetCanva(canva, UseDefaultCellSize, cellNum);
+        }
+        static public void DrawImage2D(Image img, Pen pen)
+        {
+            Drawer.DrawImage2D(img, pen);
+        }
+        static public void ClearWindow()
+        {
+            Drawer.clr();
+        }
+        #endregion
     }
+    //Класс загрузки/сохранения примера
     class Parser
     {
         static public Image[] ReadTask()
@@ -89,7 +107,54 @@ namespace PatternRecognitionLib
         }
     }
 
+    //Класс работы с графикой
     class Drawer
     {
+        #region Поля класса отрисовки
+        static object canva;
+        static Graphics gs;
+        static int cellSize = 1;
+        static int midX, midY;
+        #endregion
+        #region Методы отрисовки
+        static public void SetCanva(object _canva, bool UseDefaultCellSize, int cellNum)
+        {
+            canva = _canva;
+            try
+            {
+                PictureBox pBox = (PictureBox)canva;
+                if (UseDefaultCellSize != true)
+                {
+
+                    int max = 0;
+                    if (pBox.Height > pBox.Width)
+                    {
+                        max = pBox.Height;
+                    }
+                    else
+                    {
+                        max = pBox.Width;
+                    }
+                    cellSize = max / cellNum;
+                    gs = pBox.CreateGraphics();
+                }
+
+            }
+            catch (Exception e)
+            { }
+            
+        }
+        static public void DrawImage2D(Image img, Pen pen)
+        { 
+            for (int i = 0; i<img.Count; i++)
+            {
+                gs.DrawEllipse(pen, (float)((img[i][0]*cellSize)-2), (float)((img[i][1]*cellSize)-2), 4, 4);
+            }
+        }
+        static public void clr()
+        {
+            gs.Clear(Color.White);
+        }
+        #endregion
     }
 }
