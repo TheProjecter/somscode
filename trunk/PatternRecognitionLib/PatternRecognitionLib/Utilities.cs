@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 
 namespace PatternRecognitionLib
@@ -30,6 +31,34 @@ namespace PatternRecognitionLib
         static public void DrawImage2D(Image img, Pen pen)
         {
             Drawer.DrawImage2D(img, pen);
+        }
+        static public void DrawLine2D(vectorObject w, vectorObject x1, vectorObject y1)
+        {
+            vectorObject begin = x1 + y1;
+            float a = (w * begin)/2;
+            float yk = (a - w[0] * Drawer.Size[0]) / w[1];
+            float y0 = a / w[1];
+
+            begin = new vectorObject(0, y0);
+            vectorObject end = new vectorObject(Drawer.Size[0], yk);
+
+            begin = Drawer.ReCoord2D(begin);
+            end = Drawer.ReCoord2D(end);
+
+            Drawer.DrawLine2D((float)(Drawer.Center[0] + (begin[0] * Drawer.CellSize)),
+                (float)(Drawer.Center[1] + (begin[1] * Drawer.CellSize)),
+                (float)(Drawer.Center[0] + (end[0] * Drawer.CellSize)),
+                (float)(Drawer.Center[1] + (end[1] * Drawer.CellSize)));
+        }
+        static public void DrawLine2D(vectorObject x, vectorObject y)
+        {
+            vectorObject begin = Drawer.ReCoord2D(x);
+            vectorObject end = Drawer.ReCoord2D(y);
+
+            Drawer.DrawDashLine2D((float)(Drawer.Center[0] + (begin[0] * Drawer.CellSize)),
+                (float)(Drawer.Center[1] + (begin[1] * Drawer.CellSize)),
+                (float)(Drawer.Center[0] + (end[0] * Drawer.CellSize)),
+                (float)(Drawer.Center[1] + (end[1] * Drawer.CellSize)));
         }
         static public void ClearWindow()
         {
@@ -60,10 +89,10 @@ namespace PatternRecognitionLib
                     for (int j = 0; j < objs.Count() - 1; j++)
                     {
                         string[] coords = objs[j].Split(',');
-                        double[] crds = new double[coords.Count()];
+                        float[] crds = new float[coords.Count()];
                         for (int k = 0; k < crds.Count(); k++)
                         {
-                            crds[k] = Double.Parse(coords[k]);
+                            crds[k] =  float.Parse(coords[k]);
                         }
                         imgs[i][j] = new vectorObject(crds);
                     }
@@ -114,7 +143,20 @@ namespace PatternRecognitionLib
         static object canva;
         static Graphics gs;
         static int cellSize = 1;
-        static int midX, midY;
+        static vectorObject mid = new vectorObject(2);
+        static int[] size = new int[2];
+        public static int[] Size
+        {
+            get { return size; }
+        }
+        public static vectorObject Center
+        {
+            get { return mid; }
+        }
+        public static int CellSize
+        {
+            get { return cellSize; }
+        }
         #endregion
         #region Методы отрисовки
         static public void SetCanva(object _canva, bool UseDefaultCellSize, int cellNum)
@@ -125,7 +167,6 @@ namespace PatternRecognitionLib
                 PictureBox pBox = (PictureBox)canva;
                 if (UseDefaultCellSize != true)
                 {
-
                     int max = 0;
                     if (pBox.Height > pBox.Width)
                     {
@@ -136,9 +177,14 @@ namespace PatternRecognitionLib
                         max = pBox.Width;
                     }
                     cellSize = max / cellNum;
-                    gs = pBox.CreateGraphics();
                 }
-
+                size[0] = pBox.Width;
+                size[1] = pBox.Height;
+                gs = pBox.CreateGraphics();
+                mid[0] = pBox.Width/2;
+                mid[1] = pBox.Height/2;
+                DrawLine2D(mid[0], 0, mid[0], size[1]);
+                DrawLine2D(0, mid[1], size[0], mid[1]);
             }
             catch (Exception e)
             { }
@@ -148,12 +194,44 @@ namespace PatternRecognitionLib
         { 
             for (int i = 0; i<img.Count; i++)
             {
-                gs.DrawEllipse(pen, (float)((img[i][0]*cellSize)-2), (float)((img[i][1]*cellSize)-2), 4, 4);
+                DrawPoint((float)(mid[0]+(ReCoord2D(img[i])[0] * cellSize) - 2),
+                    (float)(mid[1] + (ReCoord2D(img[i])[1] * cellSize) - 2), pen);
             }
+        }
+        static public void DrawPoint(float x, float y, Pen pen)
+        {
+            gs.DrawEllipse(pen, x, y, 4 , 4);
+        }
+        static public void DrawLine2D(float x1, float y1, float x2, float y2)
+        {
+            Pen pen = new Pen(Brushes.Black, 2);
+
+            gs.DrawLine(pen, x1, y1, x2, y2);
+        }
+        static public void DrawDashLine2D(float x1, float y1, float x2, float y2)
+        {
+            Pen pen = new Pen(Brushes.Black, 1);
+            pen.DashStyle = DashStyle.Dash;
+
+            gs.DrawLine(pen, x1, y1, x2, y2);
         }
         static public void clr()
         {
             gs.Clear(Color.White);
+            DrawLine2D(mid[0], 0,mid[0], size[1]);
+            DrawLine2D(0, mid[1], size[0],mid[1]);
+        }
+        static public vectorObject ReCoord2D(vectorObject OldCoord)
+        {
+            vectorObject NewCoord = new vectorObject(OldCoord.Size);
+
+            NewCoord[0] = OldCoord[0];
+            if (OldCoord[1] > 0)
+                NewCoord[1] = - OldCoord[1];
+            else
+                NewCoord[1] = - OldCoord[1];
+
+            return NewCoord;
         }
         #endregion
     }
