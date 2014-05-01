@@ -10,17 +10,17 @@ namespace PatternRecognitionLib
     //Класс вектор-объекта
     public class vectorObject
     {
-        private double[] coords;
+        private float[] coords;
         private int n = 0;
         public vectorObject(int _n)
         {
             if (_n != 0)
             {
-                coords = new double[_n];
+                coords = new float[_n];
             }
             n = _n;
         }
-        public vectorObject(params double[] _coords)
+        public vectorObject(params float[] _coords)
         {
             coords = _coords;
             n = coords.Count();
@@ -37,20 +37,20 @@ namespace PatternRecognitionLib
                 if (n == 0)
                 {
                     n = value;
-                    coords = new double[n];
+                    coords = new float[n];
                 }
             }
             get { return n; }
         }
-        public double Norm()
+        public float Norm()
         {
-            double tmp = 0;
+            float tmp = 0;
 
             for (int i = 0; i < n; i++)
             {
                 tmp = tmp + (coords[i] * coords[i]);
             }
-            tmp = Math.Sqrt(tmp);
+            tmp = (float)Math.Sqrt(tmp);
 
             return tmp;
         }
@@ -58,7 +58,7 @@ namespace PatternRecognitionLib
         {
             vectorObject tmp = new vectorObject(this.coords);
 
-            double norm = tmp.Norm();
+            float norm = tmp.Norm();
 
             for (int i = 0; i < n; i++)
             {
@@ -67,15 +67,15 @@ namespace PatternRecognitionLib
 
             return tmp;
         }
-        public double this[int Xn]
+        public float this[int Xn]
         {
             get { return coords[Xn]; }
             set { coords[Xn] = value; }
         }
         #region Операторы
-        public static double operator *(vectorObject v1, vectorObject v2)
+        public static float operator *(vectorObject v1, vectorObject v2)
         {
-            double tmp = 0;
+            float tmp = 0;
 
             for (int i = 0; i < v1.n; i++)
             {
@@ -84,7 +84,7 @@ namespace PatternRecognitionLib
 
             return tmp;
         }
-        public static vectorObject operator *(double alpha, vectorObject v)
+        public static vectorObject operator *(float alpha, vectorObject v)
         {
             vectorObject tmp = new vectorObject(v.n);
 

@@ -11,7 +11,8 @@ namespace PatternRecognitionLib
     public class MinMaxRule
     {
         private Image X, Y;
-        private vectorObject x0, y0, w;
+        private vectorObject x0, y0;
+        public vectorObject W;
         public MinMaxRule(Image _X, Image _Y)
         { 
             X = _X; 
@@ -21,6 +22,8 @@ namespace PatternRecognitionLib
         }
         public void BuildRule(double gamma, double omega)
         {
+            vectorObject x1;
+            vectorObject y1;
             while (true)
             {
                 vectorObject xp = new vectorObject(x0.Size);
@@ -28,11 +31,15 @@ namespace PatternRecognitionLib
 
                 FindMaxPrs(ref xp, ref yq);
                 
-                vectorObject x1 = new vectorObject(x0.Size);
-                vectorObject y1 = new vectorObject(y0.Size);
+                x1 = new vectorObject(x0.Size);
+                y1 = new vectorObject(y0.Size);
                 
                 FindMinLength(ref xp, ref yq, ref x1, ref y1);
-                w = FindHyperplane(x1, y1);
+                W = FindHyperplane(x1, y1);
+                Utilities.DrawLine2D(x0, xp);
+                Utilities.DrawLine2D(x0, yq);
+                Utilities.DrawLine2D(x1, y1);
+                Utilities.DrawLine2D(W, x1, y1);
                 if (IsSeparating(omega))
                 {
                     if (IsRightPlane(x1, y1))
@@ -42,8 +49,8 @@ namespace PatternRecognitionLib
                             break;
                         }
                     }
-                    x0 = x1;
-                    y0 = y1;
+                    x0 = xp;
+                    y0 = yq;
                 }
                 else
                 {
@@ -79,16 +86,16 @@ namespace PatternRecognitionLib
         }
 
         //Вычисляем коэфициенты по т. Куна-Такера
-        private void  KuhnTucker(ref double l1, ref double l2, vectorObject xp, vectorObject yq)
+        private void  KuhnTucker(ref float l1, ref float l2, vectorObject xp, vectorObject yq)
         {
             #region объявление и инициализация переменных
-            double a = (y0 - x0) * (xp - x0);
-            double b = (y0 - yq) * (y0 - yq);
-            double c = (y0 - x0) * (y0 - yq);
-            double d = (xp - x0) * (y0 - yq);
-            double e = (xp - x0) * (xp - x0);
-            double f = (y0 - xp) * (y0 - yq);
-            double h = (yq - x0) * (xp - x0);
+            float a = (y0 - x0) * (xp - x0);
+            float b = (y0 - yq) * (y0 - yq);
+            float c = (y0 - x0) * (y0 - yq);
+            float d = (xp - x0) * (y0 - yq);
+            float e = (xp - x0) * (xp - x0);
+            float f = (y0 - xp) * (y0 - yq);
+            float h = (yq - x0) * (xp - x0);
             #endregion
             //36
             if ((b * e) - (d * d) != 0)
@@ -167,8 +174,8 @@ namespace PatternRecognitionLib
         private void FindMinLength(ref vectorObject xp, ref vectorObject yq, 
                                     ref vectorObject x1, ref vectorObject y1)
         {
-            double l1 = 0;
-            double l2 = 0;
+            float l1 = 0;
+            float l2 = 0;
 
             KuhnTucker(ref l1, ref l2, xp, yq);
            
@@ -189,12 +196,12 @@ namespace PatternRecognitionLib
         {
             for (int i = 0; i < X.Count; i++)
             {
-                if ((w * X[i] - w * (x1 + y1) / 2) < 0)
+                if ((W * X[i] - W * (x1 + y1) / 2) < 0)
                     return false;
             }
             for (int i = 0; i < Y.Count; i++)
             {
-                if ((w * Y[i] - w * (x1 + y1) / 2) > 0)
+                if ((W * Y[i] - W * (x1 + y1) / 2) > 0)
                     return false;
             }
             return true;
@@ -202,26 +209,26 @@ namespace PatternRecognitionLib
 
         private bool IsSeparating(double omega)
         {
-            return (w.Norm() > omega);
+            return (W.Norm() > omega);
         }
         
         //Критерий останова
         private bool StoppingCriterion(vectorObject x1, vectorObject y1, double gamma)
         {
             double p = Math.Abs((x1 - y1).Norm());
-            double min = Math.Abs((w * X[0]) / w.Norm());
+            double min = Math.Abs((W * X[0]) / W.Norm());
             for (int i = 0; i < X.Count; i++)
             {
-                if (Math.Abs((w * X[i]) / w.Norm()) < min)
+                if (Math.Abs((W * X[i]) / W.Norm()) < min)
                 {
-                    min = Math.Abs((w * X[i]) / w.Norm());
+                    min = Math.Abs((W * X[i]) / W.Norm());
                 }
             }
             for (int i = 0; i < Y.Count; i++)
             {
-                if (Math.Abs((w * Y[i]) / w.Norm()) < min)
+                if (Math.Abs((W * Y[i]) / W.Norm()) < min)
                 {
-                    min = Math.Abs((w * Y[i]) / w.Norm());
+                    min = Math.Abs((W * Y[i]) / W.Norm());
                 }
             }
 
