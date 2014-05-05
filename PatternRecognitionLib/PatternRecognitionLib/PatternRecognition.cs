@@ -37,7 +37,7 @@ namespace PatternRecognitionLib
                 FindMinLength(ref xp, ref yq, ref x1, ref y1);
                 W = FindHyperplane(x1, y1);
                 Utilities.DrawLine2D(x0, xp);
-                Utilities.DrawLine2D(x0, yq);
+                Utilities.DrawLine2D(y0, yq);
                 Utilities.DrawLine2D(x1, y1);
                 Utilities.DrawLine2D(W, x1, y1);
                 if (IsSeparating(omega))
