@@ -12,34 +12,41 @@ namespace PatternRecognitionLib
     {
         private Image X, Y;
         private vectorObject x0, y0;
-        public vectorObject W;
+        private vectorObject W;
         public MinMaxRule(Image _X, Image _Y)
-        { 
+        {
             X = _X; 
             Y = _Y; 
             x0 = X[0]; 
-            y0 = Y[0]; 
+            y0 = Y[0];
         }
         public void BuildRule(double gamma, double omega)
         {
+            List<object> drawList = new List<object>();
             vectorObject x1;
             vectorObject y1;
+            drawList.Add(X);
+            drawList.Add(Y);
             while (true)
             {
                 vectorObject xp = new vectorObject(x0.Size);
                 vectorObject yq = new vectorObject(y0.Size);
 
                 FindMaxPrs(ref xp, ref yq);
-                
+
                 x1 = new vectorObject(x0.Size);
                 y1 = new vectorObject(y0.Size);
-                
+
                 FindMinLength(ref xp, ref yq, ref x1, ref y1);
+                vectorObject[] x = { x0, xp };
+                vectorObject[] y = { y0, yq };
+                drawList.Add(x);
+                drawList.Add(y);
                 W = FindHyperplane(x1, y1);
-                Utilities.DrawLine2D(x0, xp);
-                Utilities.DrawLine2D(y0, yq);
-                Utilities.DrawLine2D(x1, y1);
-                Utilities.DrawLine2D(W, x1, y1);
+                vectorObject[] vect1 = { x1, y1 };
+                drawList.Add(vect1);
+                vectorObject[] vect2 = { W, x1, y1 };
+                drawList.Add(vect2);
                 if (IsSeparating(omega))
                 {
                     if (IsRightPlane(x1, y1))
@@ -56,12 +63,18 @@ namespace PatternRecognitionLib
                 {
                     break;
                 }
+                Utilities.DrawFromList2D(drawList, false);
             }
+            Utilities.DrawFromList2D(drawList, false);
         }
+
         #region Функции алгоритма
         //Поиск Xp и Yq
         private void FindMaxPrs(ref vectorObject xp, ref vectorObject yq)
         {
+            List<object> drawPList = new List<object>();
+            drawPList.Add(X);
+            drawPList.Add(Y);
             double max = 0;
 
             for(int i=0; i<X.Count; i++)
@@ -71,8 +84,12 @@ namespace PatternRecognitionLib
                     max = (X[i] - x0) * (y0 - x0);
                     xp = X[i];
                 }
+                if (x0 != X[i])
+                {
+                    vectorObject[] vect = { x0, X[i] };
+                    drawPList.Add(vect);
+                }
             }
-
             max = 0;
 
             for (int i = 0; i < Y.Count; i++)
@@ -82,7 +99,13 @@ namespace PatternRecognitionLib
                     max = (Y[i] - y0) * (x0 - y0);
                     yq = Y[i];
                 }
+                if (y0 != Y[i])
+                {
+                    vectorObject[] vect = { y0, Y[i] };
+                    drawPList.Add(vect);
+                }
             }
+            Utilities.DrawFromList2D(drawPList, true);
         }
 
         //Вычисляем коэфициенты по т. Куна-Такера

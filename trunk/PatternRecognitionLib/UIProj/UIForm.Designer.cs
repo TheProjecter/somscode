@@ -36,13 +36,15 @@
             this.конфигурацияToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.drawBox = new System.Windows.Forms.PictureBox();
             this.clearButton = new System.Windows.Forms.Button();
+            this.Image1Button = new System.Windows.Forms.Button();
+            this.Image2Button = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.drawBox)).BeginInit();
             this.SuspendLayout();
             // 
             // buildButton
             // 
-            this.buildButton.Location = new System.Drawing.Point(12, 483);
+            this.buildButton.Location = new System.Drawing.Point(12, 526);
             this.buildButton.Name = "buildButton";
             this.buildButton.Size = new System.Drawing.Size(75, 23);
             this.buildButton.TabIndex = 0;
@@ -100,10 +102,11 @@
             this.drawBox.Size = new System.Drawing.Size(760, 450);
             this.drawBox.TabIndex = 2;
             this.drawBox.TabStop = false;
+            this.drawBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.drawBox_MouseClick);
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(93, 483);
+            this.clearButton.Location = new System.Drawing.Point(174, 483);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 3;
@@ -111,12 +114,34 @@
             this.clearButton.UseVisualStyleBackColor = true;
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
+            // Image1Button
+            // 
+            this.Image1Button.Location = new System.Drawing.Point(12, 483);
+            this.Image1Button.Name = "Image1Button";
+            this.Image1Button.Size = new System.Drawing.Size(75, 23);
+            this.Image1Button.TabIndex = 4;
+            this.Image1Button.Text = "1 образ";
+            this.Image1Button.UseVisualStyleBackColor = true;
+            this.Image1Button.Click += new System.EventHandler(this.Image1Button_Click);
+            // 
+            // Image2Button
+            // 
+            this.Image2Button.Location = new System.Drawing.Point(93, 483);
+            this.Image2Button.Name = "Image2Button";
+            this.Image2Button.Size = new System.Drawing.Size(75, 23);
+            this.Image2Button.TabIndex = 5;
+            this.Image2Button.Text = "2 образ";
+            this.Image2Button.UseVisualStyleBackColor = true;
+            this.Image2Button.Click += new System.EventHandler(this.Image2Button_Click);
+            // 
             // UIForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.Image2Button);
+            this.Controls.Add(this.Image1Button);
             this.Controls.Add(this.clearButton);
             this.Controls.Add(this.drawBox);
             this.Controls.Add(this.buildButton);
@@ -142,6 +167,8 @@
         private System.Windows.Forms.ToolStripMenuItem конфигурацияToolStripMenuItem1;
         private System.Windows.Forms.PictureBox drawBox;
         private System.Windows.Forms.Button clearButton;
+        private System.Windows.Forms.Button Image1Button;
+        private System.Windows.Forms.Button Image2Button;
     }
 }
 

@@ -15,22 +15,22 @@ namespace UIProj
     {
         double gamma = 0.1;
         double omega = 0.8;
-        bool taskMod = false;
+        bool taskMod = false, setCanva = false;
+        int ImgNum = -1, VecNum = -1;
         PatternRecognitionLib.Image[] imgs = null;
-        Graphics gs;
         public UIForm()
         {
             InitializeComponent();
-            gs = drawBox.CreateGraphics();
         }
         private void buildButton_Click(object sender, EventArgs e)
         {
             if (imgs != null)
             {
-                if (taskMod == true)
+                if (taskMod == true || ImgNum!=-1)
                 {
                     LinRule rule = new LinRule(imgs);
                     rule.BuildRules(gamma, omega);
+                    setCanva = false;
                 }
             }
             else
@@ -60,8 +60,58 @@ namespace UIProj
         }
         private void clearButton_Click(object sender, EventArgs e)
         {
-            taskMod = false;
+            if (taskMod) taskMod = false;
+            ImgNum = -1;
+            VecNum = -1;
             Utilities.ClearWindow();
+        }
+
+        private void drawBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if(ImgNum==0)
+            {
+                imgs[ImgNum][VecNum] = Utilities.SetVector(e.X, e.Y, Pens.Blue);
+                VecNum++;
+            }
+            else
+            {
+                if (ImgNum == 1)
+                {
+                    imgs[ImgNum][VecNum] = Utilities.SetVector(e.X, e.Y, Pens.Red);
+                    VecNum++;
+                }
+                else
+                {
+                    MessageBox.Show("Сначала выберите образ", "Внимание!",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private void Image1Button_Click(object sender, EventArgs e)
+        {
+            if (!setCanva)
+            {
+                Utilities.SetCanva(drawBox, true);
+                setCanva = true;
+                imgs = new PatternRecognitionLib.Image[2];
+            }
+            imgs[0] = new PatternRecognitionLib.Image();
+            ImgNum = 0;
+            VecNum = 0;
+        }
+
+        private void Image2Button_Click(object sender, EventArgs e)
+        {
+            if (!setCanva)
+            {
+                Utilities.SetCanva(drawBox, true);
+                setCanva = true;
+                imgs = new PatternRecognitionLib.Image[2];
+            }
+            imgs[1] = new PatternRecognitionLib.Image();
+            ImgNum = 1;
+            VecNum = 0;
         }
     }
 }
