@@ -12,6 +12,11 @@ namespace PatternRecognitionLib
     {
         private float[] coords;
         private int n = 0;
+        public vectorObject()
+        {
+            coords = new float[2];
+            n = 2;
+        }
         public vectorObject(int _n)
         {
             if (_n != 0)
@@ -70,7 +75,19 @@ namespace PatternRecognitionLib
         public float this[int Xn]
         {
             get { return coords[Xn]; }
-            set { coords[Xn] = value; }
+            set
+            {
+                if (Xn >= n)
+                {
+                    float[] New = new float[Xn+1];
+                    for (int i = 0; i < n; i++)
+                    {
+                        New[i] = coords[i];
+                    }
+                    coords = New;
+                }
+                coords[Xn] = value;
+            }
         }
         #region Операторы
         public static float operator *(vectorObject v1, vectorObject v2)
@@ -114,6 +131,24 @@ namespace PatternRecognitionLib
             }
             return tmp;
         }
+        public static bool operator != (vectorObject v1, vectorObject v2)
+        {
+            for (int i = 0; i < v1.n; i++)
+            {
+                if (v1[i] != v2[i])
+                    return true;
+            }
+            return false;
+        }
+        public static bool operator == (vectorObject v1, vectorObject v2)
+        {
+            for (int i = 0; i < v1.n; i++)
+            {
+                if (v1[i] != v2[i])
+                    return false;
+            }
+            return true;
+        }
         public string ToString()
         {
             string tmp = "";
@@ -130,26 +165,6 @@ namespace PatternRecognitionLib
             return tmp;
         }
         
-    //    public static bool operator ==(vectorObject v1, vectorObject v2)
-    //    {
-    //        int count = 0;
-    //        for (int i = 0; i < v1.n; i++)
-    //        {
-    //            if (v1[i] == v2[i]) count++;
-    //        }
-    //        if (count == v1.n) return true;
-    //        return false;
-    //    }
-    //    public static bool operator !=(vectorObject v1, vectorObject v2)
-    //    {
-    //        int count = 0;
-    //        for (int i = 0; i < v1.n; i++)
-    //        {
-    //            if (v1[i] == v2[i]) count++;
-    //        }
-    //        if (count == v1.n) return false;
-    //        return true;
-        //    }
         #endregion
     }
 }

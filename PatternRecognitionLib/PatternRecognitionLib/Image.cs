@@ -13,9 +13,15 @@ namespace PatternRecognitionLib
         private vectorObject[] objects;
         private int count;
         public Image()
-        { objects = new vectorObject[2]; count = 2; }
+        { 
+            objects = new vectorObject[2]; 
+            count = 2; 
+        }
         public Image(int n)
-        { objects = new vectorObject[n]; count = n; }
+        { 
+            objects = new vectorObject[n]; 
+            count = n; 
+        }
         public int Count
         {
             get { return count; }
@@ -25,12 +31,17 @@ namespace PatternRecognitionLib
             get { return objects[ObjN]; }
             set
             {
-                if (ObjN < count)
-                    objects[ObjN] = value;
-                else
+                if (ObjN >= count)
                 {
-                    vectorObject[] tmp = new vectorObject[ObjN];
+                    vectorObject[] New = new vectorObject[ObjN+1];
+                    for(int i=0; i<count; i++)
+                    {
+                        New[i] = objects[i];
+                    }
+                    objects = New;
+                    count = ObjN + 1;
                 }
+                objects[ObjN] = value;
             }
         }
 
