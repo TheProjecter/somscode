@@ -25,10 +25,11 @@ namespace PatternRecognitionLib
             List<object> drawList = new List<object>();
             vectorObject x1;
             vectorObject y1;
-            drawList.Add(X);
-            drawList.Add(Y);
             while (true)
             {
+                drawList.Add(X);
+                drawList.Add(Y);
+
                 vectorObject xp = new vectorObject(x0.Size);
                 vectorObject yq = new vectorObject(y0.Size);
 
@@ -64,6 +65,7 @@ namespace PatternRecognitionLib
                     break;
                 }
                 Utilities.DrawFromList2D(drawList, false);
+                drawList.Clear();
             }
             Utilities.DrawFromList2D(drawList, false);
         }
@@ -75,8 +77,9 @@ namespace PatternRecognitionLib
             List<object> drawPList = new List<object>();
             drawPList.Add(X);
             drawPList.Add(Y);
-            double max = 0;
 
+            double max = (X[0] - x0) * (y0 - x0);
+            xp = X[0];
             for(int i=0; i<X.Count; i++)
             {
                 if ((X[i] - x0) * (y0 - x0) > max)
@@ -90,7 +93,9 @@ namespace PatternRecognitionLib
                     drawPList.Add(vect);
                 }
             }
-            max = 0;
+
+            max = (Y[0] - y0) * (x0 - y0);
+            yq = Y[0];
 
             for (int i = 0; i < Y.Count; i++)
             {
@@ -105,7 +110,7 @@ namespace PatternRecognitionLib
                     drawPList.Add(vect);
                 }
             }
-            Utilities.DrawFromList2D(drawPList, true);
+            //Utilities.DrawFromList2D(drawPList, true);
         }
 
         //Вычисляем коэфициенты по т. Куна-Такера
