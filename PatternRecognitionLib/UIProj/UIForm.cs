@@ -16,7 +16,9 @@ namespace UIProj
         double gamma = 0.1;
         double omega = 0.8;
         bool taskMod = false, setCanva = false;
-        int ImgNum = -1, VecNum = -1;
+        int ImgNum = -1;
+        int NumIdx =-1;
+        int[] VecNum = { 0, 0 };
         PatternRecognitionLib.Image[] imgs = null;
         public UIForm()
         {
@@ -49,10 +51,13 @@ namespace UIProj
         private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             imgs = Utilities.ReadTask();
-            Utilities.SetCanva(drawBox, false, 20);
-            Utilities.DrawImage2D(imgs[0], Pens.BlueViolet);
-            Utilities.DrawImage2D(imgs[1], Pens.Red);
-            taskMod = true;
+            if (imgs != null)
+            {
+                Utilities.SetCanva(drawBox, false, Utilities.GetCellNum2D(imgs));
+                Utilities.DrawImage2D(imgs[0], Pens.BlueViolet);
+                Utilities.DrawImage2D(imgs[1], Pens.Red);
+                taskMod = true;
+            }
         }
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -61,24 +66,26 @@ namespace UIProj
         private void clearButton_Click(object sender, EventArgs e)
         {
             if (taskMod) taskMod = false;
+            setCanva = false;
             ImgNum = -1;
-            VecNum = -1;
+            NumIdx = -1;
+            VecNum[0] = 0;
+            VecNum[1] = 0;
             Utilities.ClearWindow();
         }
-
         private void drawBox_MouseClick(object sender, MouseEventArgs e)
         {
             if(ImgNum==0)
             {
-                imgs[ImgNum][VecNum] = Utilities.SetVector(e.X, e.Y, Pens.Blue);
-                VecNum++;
+                imgs[ImgNum][VecNum[NumIdx]] = Utilities.SetVector(e.X, e.Y, Pens.Blue);
+                VecNum[NumIdx]++;
             }
             else
             {
                 if (ImgNum == 1)
                 {
-                    imgs[ImgNum][VecNum] = Utilities.SetVector(e.X, e.Y, Pens.Red);
-                    VecNum++;
+                    imgs[ImgNum][VecNum[NumIdx]] = Utilities.SetVector(e.X, e.Y, Pens.Red);
+                    VecNum[NumIdx]++;
                 }
                 else
                 {
@@ -87,7 +94,6 @@ namespace UIProj
                 }
             }
         }
-
         private void Image1Button_Click(object sender, EventArgs e)
         {
             if (!setCanva)
@@ -95,12 +101,15 @@ namespace UIProj
                 Utilities.SetCanva(drawBox, true);
                 setCanva = true;
                 imgs = new PatternRecognitionLib.Image[2];
+                taskMod = false;
             }
-            imgs[0] = new PatternRecognitionLib.Image();
+            if (imgs[0] == null)
+            {
+                imgs[0] = new PatternRecognitionLib.Image();
+            }
             ImgNum = 0;
-            VecNum = 0;
+            NumIdx = 0;
         }
-
         private void Image2Button_Click(object sender, EventArgs e)
         {
             if (!setCanva)
@@ -108,10 +117,14 @@ namespace UIProj
                 Utilities.SetCanva(drawBox, true);
                 setCanva = true;
                 imgs = new PatternRecognitionLib.Image[2];
+                taskMod = false;
             }
-            imgs[1] = new PatternRecognitionLib.Image();
+            if (imgs[1] == null )
+            {
+                imgs[1] = new PatternRecognitionLib.Image();
+            }
             ImgNum = 1;
-            VecNum = 0;
+            NumIdx = 1;
         }
     }
 }

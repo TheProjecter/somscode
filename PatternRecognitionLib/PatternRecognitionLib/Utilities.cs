@@ -25,9 +25,36 @@ namespace PatternRecognitionLib
         }
         #endregion
         #region Функции работы с графикой
-        static public void SetCanva(object canva, bool UseDefaultCellSize, int cellNum=0)
+        static public void SetCanva(object canva, bool UseDefaultCellSize, int cellNum = 0)
         {
             Drawer.SetCanva(canva, UseDefaultCellSize, cellNum);
+        }
+        static public int GetCellNum2D(Image[] imgs)
+        {
+            float mX = 0;
+            float mY = 0;
+            for (int i=0; i<imgs.Count(); i++)
+            {
+                for(int j=0; j<imgs[i].Count; j++)
+                {
+                    if (Math.Abs(imgs[i][j][0])>mX)
+                    {
+                        mX = Math.Abs(imgs[i][j][0]);
+                    }
+                    if (imgs[i][j][1]>mY)
+                    {
+                        mY = Math.Abs(imgs[i][j][1]);
+                    }
+                }
+            }
+            if (mX>mY)
+            { 
+                return (int)(2*mX+1);
+            }
+            else
+            {
+                return (int)(2*mY+1);
+            }
         }
         static public void ReCanva()
         {
@@ -91,6 +118,7 @@ namespace PatternRecognitionLib
         }
         static public void DrawFromList2D(List<object> drawList, bool iterationClearning)
         {
+            ClearWindow();
             DrawImage2D((Image)(drawList[0]), Pens.Blue);
             DrawImage2D((Image)(drawList[1]), Pens.Red);
             for (int i = 2; i < drawList.Count; i++)
@@ -265,6 +293,7 @@ namespace PatternRecognitionLib
             try
             {
                 PictureBox pBox = (PictureBox)canva;
+                cellSize = 1;
                 if (UseDefaultCellSize != true)
                 {
                     int min = 0;
@@ -281,6 +310,7 @@ namespace PatternRecognitionLib
                 size[0] = pBox.Width;
                 size[1] = pBox.Height;
                 gs = pBox.CreateGraphics();
+                clr();
                 mid[0] = size[0]/2;
                 mid[1] = size[1]/2;
                 DrawLine2D(mid[0], 0, mid[0], size[1]);
