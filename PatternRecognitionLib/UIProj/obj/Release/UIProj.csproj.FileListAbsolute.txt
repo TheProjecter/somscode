@@ -1,0 +1,12 @@
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\UIProj.exe.config
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\UIProj.exe
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\UIProj.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\PatternRecognitionLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\PatternRecognitionLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.csprojResolveAssemblyReference.cache
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.ConfigForm.resources
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.Properties.Resources.resources
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.UIForm.resources
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.csproj.GenerateResource.Cache
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.exe
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.pdb

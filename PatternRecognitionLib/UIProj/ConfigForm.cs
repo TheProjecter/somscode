@@ -14,7 +14,7 @@ namespace UIProj
     {
         public double gamma = 0.8;
         public double omega = 0.1;
-
+        public bool isMulti = true;
         public ConfigForm()
         {
             InitializeComponent();
@@ -34,5 +34,16 @@ namespace UIProj
             omega = Double.Parse(omegaBox.Text);
             this.Close();
         }
+
+        private void multiButton_CheckedChanged(object sender, EventArgs e)
+        {
+            isMulti = true;
+        }
+
+        private void iterButton_CheckedChanged(object sender, EventArgs e)
+        {
+            isMulti = false;
+        }
+
     }
 }
