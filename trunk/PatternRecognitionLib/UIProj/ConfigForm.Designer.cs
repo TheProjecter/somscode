@@ -33,6 +33,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.okButton = new System.Windows.Forms.Button();
+            this.multiButton = new System.Windows.Forms.RadioButton();
+            this.iterButton = new System.Windows.Forms.RadioButton();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // gammaBox
@@ -69,7 +72,7 @@
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(109, 73);
+            this.okButton.Location = new System.Drawing.Point(103, 102);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 4;
@@ -77,11 +80,47 @@
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
+            // multiButton
+            // 
+            this.multiButton.AutoSize = true;
+            this.multiButton.Checked = true;
+            this.multiButton.Location = new System.Drawing.Point(39, 79);
+            this.multiButton.Name = "multiButton";
+            this.multiButton.Size = new System.Drawing.Size(110, 17);
+            this.multiButton.TabIndex = 5;
+            this.multiButton.TabStop = true;
+            this.multiButton.Text = "Мультипликация";
+            this.multiButton.UseVisualStyleBackColor = true;
+            this.multiButton.CheckedChanged += new System.EventHandler(this.multiButton_CheckedChanged);
+            // 
+            // iterButton
+            // 
+            this.iterButton.AutoSize = true;
+            this.iterButton.Location = new System.Drawing.Point(155, 79);
+            this.iterButton.Name = "iterButton";
+            this.iterButton.Size = new System.Drawing.Size(93, 17);
+            this.iterButton.TabIndex = 6;
+            this.iterButton.Text = "Итеративный";
+            this.iterButton.UseVisualStyleBackColor = true;
+            this.iterButton.CheckedChanged += new System.EventHandler(this.iterButton_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(104, 63);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(45, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Режим:";
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 108);
+            this.ClientSize = new System.Drawing.Size(311, 137);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.iterButton);
+            this.Controls.Add(this.multiButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -101,5 +140,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.RadioButton multiButton;
+        private System.Windows.Forms.RadioButton iterButton;
+        private System.Windows.Forms.Label label3;
     }
 }

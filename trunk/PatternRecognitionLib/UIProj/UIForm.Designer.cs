@@ -38,6 +38,7 @@
             this.clearButton = new System.Windows.Forms.Button();
             this.Image1Button = new System.Windows.Forms.Button();
             this.Image2Button = new System.Windows.Forms.Button();
+            this.NextButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.drawBox)).BeginInit();
             this.SuspendLayout();
@@ -106,7 +107,7 @@
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(174, 483);
+            this.clearButton.Location = new System.Drawing.Point(223, 483);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 3;
@@ -134,12 +135,23 @@
             this.Image2Button.UseVisualStyleBackColor = true;
             this.Image2Button.Click += new System.EventHandler(this.Image2Button_Click);
             // 
+            // NextButton
+            // 
+            this.NextButton.Location = new System.Drawing.Point(93, 526);
+            this.NextButton.Name = "NextButton";
+            this.NextButton.Size = new System.Drawing.Size(75, 23);
+            this.NextButton.TabIndex = 6;
+            this.NextButton.Text = "Далее";
+            this.NextButton.UseVisualStyleBackColor = true;
+            this.NextButton.Click += new System.EventHandler(this.NextButton_Click);
+            // 
             // UIForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.NextButton);
             this.Controls.Add(this.Image2Button);
             this.Controls.Add(this.Image1Button);
             this.Controls.Add(this.clearButton);
@@ -169,6 +181,7 @@
         private System.Windows.Forms.Button clearButton;
         private System.Windows.Forms.Button Image1Button;
         private System.Windows.Forms.Button Image2Button;
+        private System.Windows.Forms.Button NextButton;
     }
 }
 

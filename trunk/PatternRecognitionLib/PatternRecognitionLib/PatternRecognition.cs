@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PatternRecognitionLib
@@ -13,6 +14,8 @@ namespace PatternRecognitionLib
         private Image X, Y;
         private vectorObject x0, y0;
         private vectorObject W;
+        public double gamma;
+        public double omega;
         public MinMaxRule(Image _X, Image _Y)
         {
             X = _X; 
@@ -20,7 +23,7 @@ namespace PatternRecognitionLib
             x0 = X[0]; 
             y0 = Y[0];
         }
-        public void BuildRule(double gamma, double omega)
+        public void BuildRule()
         {
             List<object> drawList = new List<object>();
             vectorObject x1;
@@ -57,17 +60,19 @@ namespace PatternRecognitionLib
                             break;
                         }
                     }
-                    x0 = xp;
-                    y0 = yq;
+                    x0 = x1;
+                    y0 = y1;
                 }
                 else
                 {
                     break;
                 }
-                Utilities.DrawFromList2D(drawList, false);
+                List<object> tmp = new List<object>(drawList);
+                Utilities.mainlist.Add(tmp);
                 drawList.Clear();
             }
-            Utilities.DrawFromList2D(drawList, false);
+            Utilities.mainlist.Add(drawList);
+            Utilities.drawDone.Set();
         }
 
         #region Функции алгоритма
@@ -78,8 +83,7 @@ namespace PatternRecognitionLib
             drawPList.Add(X);
             drawPList.Add(Y);
 
-            double max = (X[0] - x0) * (y0 - x0);
-            xp = X[0];
+            double max = 0;
             for(int i=0; i<X.Count; i++)
             {
                 if ((X[i] - x0) * (y0 - x0) > max)
@@ -94,8 +98,7 @@ namespace PatternRecognitionLib
                 }
             }
 
-            max = (Y[0] - y0) * (x0 - y0);
-            yq = Y[0];
+            max = 0;
 
             for (int i = 0; i < Y.Count; i++)
             {
@@ -110,7 +113,7 @@ namespace PatternRecognitionLib
                     drawPList.Add(vect);
                 }
             }
-            //Utilities.DrawFromList2D(drawPList, true);
+            Utilities.mainlist.Add(drawPList);
         }
 
         //Вычисляем коэфициенты по т. Куна-Такера
@@ -286,7 +289,10 @@ namespace PatternRecognitionLib
         {
             foreach(MinMaxRule rule in mxRuleList)
             {
-                rule.BuildRule(gamma, omega);
+                rule.gamma = gamma;
+                rule.omega = omega;
+                Thread mathTread = new Thread(rule.BuildRule);
+                mathTread.Start();
             }
         }
     }

@@ -14,6 +14,12 @@ namespace PatternRecognitionLib
     //Класс мэнеджер вспомогательных классов
     public class Utilities
     {
+        static public bool isMulti = true;
+        static public List<List<object>> mainlist = new List<List<object>>();
+        static public ManualResetEvent drawDone =
+            new ManualResetEvent(false);
+        static public ManualResetEvent iterDone =
+            new ManualResetEvent(false);
         #region Фунции работы с файлами
         static public Image[] ReadTask()
         {
@@ -116,77 +122,102 @@ namespace PatternRecognitionLib
 
             return tmp;
         }
+        static public void StartDrawer()
+        {
+            try
+            {
+                while (true)
+                {
+                    drawDone.WaitOne();
+                    for (int i = 0; i < mainlist.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                            DrawFromList2D(mainlist[i], true);
+                        else
+                            DrawFromList2D(mainlist[i], false);
+                    }
+                    drawDone.Reset();
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        static public void PrepareToDraw()
+        {
+            Thread drawTread = new Thread(StartDrawer);
+            drawTread.Start();
+        }
         static public void DrawFromList2D(List<object> drawList, bool iterationClearning)
         {
-            ClearWindow();
-            DrawImage2D((Image)(drawList[0]), Pens.Blue);
-            DrawImage2D((Image)(drawList[1]), Pens.Red);
-            for (int i = 2; i < drawList.Count; i++)
-            {
-                if (iterationClearning)
+                ClearWindow();
+                DrawImage2D((Image)(drawList[0]), Pens.Blue);
+                DrawImage2D((Image)(drawList[1]), Pens.Red);
+                for (int i = 2; i < drawList.Count; i++)
                 {
-                    DrawImage2D((Image)(drawList[0]), Pens.Blue);
-                    DrawImage2D((Image)(drawList[1]), Pens.Red);
-                }
-                #region Отрисовка линий
-                try
-                {
-                    vectorObject[] vect = (vectorObject[])drawList[i];
-                    if (Drawer.CellSize != 1)
+                    if (!isMulti)
                     {
-                        if (vect != null & vect.Count() == 2)
+                        iterDone.WaitOne();
+                    }
+                    if (iterationClearning)
+                    {
+                        ClearWindow();
+                        DrawImage2D((Image)(drawList[0]), Pens.Blue);
+                        DrawImage2D((Image)(drawList[1]), Pens.Red);
+                    }
+                    #region Отрисовка линий
+                    try
+                    {
+                        vectorObject[] vect = (vectorObject[])drawList[i];
+                        if (Drawer.CellSize != 1)
                         {
-                            DrawLine2D(true, GetNewCoords(vect[0], vect[1]));
-                            Thread.Sleep(1000);
-                            if (iterationClearning)
-                                ClearWindow();
+                            if (vect != null & vect.Count() == 2)
+                            {
+                                DrawLine2D(true, GetNewCoords(vect[0], vect[1]));
+                            }
+                            else
+                            {
+                                if (vect != null & vect.Count() == 3)
+                                {
+                                    DrawLine2D(false, GetNewCoords(vect[0], vect[1], vect[2]));
+                                }
+                            }
                         }
                         else
                         {
-                            if (vect != null & vect.Count() == 3)
+                            if (vect != null & vect.Count() == 2)
                             {
-                                DrawLine2D(false, GetNewCoords(vect[0], vect[1], vect[2]));
-                                Thread.Sleep(1000);
-                                if (iterationClearning)
-                                    ClearWindow();
+                                DrawLine2D(true, vect[0], vect[1]);
+                            }
+                            else
+                            {
+                                if (vect != null & vect.Count() == 3)
+                                {
+                                    vectorObject[] be = new vectorObject[2];
+
+                                    be[0] = vect[1] + vect[2];
+                                    float a = (vect[0] * be[0]) / 2;
+                                    float yk = (a - vect[0][0] * (Drawer.Size[0] / 2)) / vect[0][1];
+                                    float y0 = (a - vect[0][0] * (-Drawer.Size[0] / 2)) / vect[0][1];
+
+                                    be[0] = new vectorObject(-Drawer.Size[0] / 2, y0);
+                                    be[1] = new vectorObject(Drawer.Size[0] / 2, yk);
+
+                                    DrawLine2D(false, be[0], be[1]);
+                                }
                             }
                         }
                     }
-                    else
+                    catch (Exception ex)
+                    { }
+                    #endregion
+                    if (isMulti)
+                        Thread.Sleep(1000);
+                    if(!isMulti)
                     {
-                        if (vect != null & vect.Count() == 2)
-                        {
-                            DrawLine2D(true, vect[0], vect[1]);
-                            Thread.Sleep(1000);
-                            if (iterationClearning)
-                                ClearWindow();
-                        }
-                        else
-                        {
-                            if (vect != null & vect.Count() == 3)
-                            {
-                                vectorObject[] be = new vectorObject[2];
-
-                                be[0] = vect[1] + vect[2];
-                                float a = (vect[0] * be[0]) / 2;
-                                float yk = (a - vect[0][0] * (Drawer.Size[0]/2)) / vect[0][1];
-                                float y0 = (a - vect[0][0] * (-Drawer.Size[0] / 2)) / vect[0][1];
-
-                                be[0] = new vectorObject(-Drawer.Size[0] / 2, y0);
-                                be[1] = new vectorObject(Drawer.Size[0] / 2, yk);
-
-                                DrawLine2D(false, be[0], be[1]);
-                                Thread.Sleep(1000);
-                                if (iterationClearning)
-                                    ClearWindow();
-                            }
-                        }
+                        iterDone.Reset();
                     }
                 }
-                catch(Exception ex)
-                { }
-            }
-            #endregion
         }
         static public void ClearWindow()
         {
@@ -340,8 +371,9 @@ namespace PatternRecognitionLib
                         (float)(mid[1] + (img[i][1] * cellSize) - 2), pen);
                 }
         }
-        static public void DrawPoint(float x, float y, Pen pen)
+        static public void DrawPoint(float x, float y, Pen _pen)
         {
+            Pen pen = new Pen(_pen.Color, 2);
             gs.DrawEllipse(pen, x, y, 4 , 4);
         }
         static public void DrawLine2D(float x1, float y1, float x2, float y2)

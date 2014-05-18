@@ -13,8 +13,8 @@ namespace UIProj
 {
     public partial class UIForm : Form
     {
-        double gamma = 0.1;
-        double omega = 0.8;
+        double gamma = 0.8;
+        double omega = 0.1;
         bool taskMod = false, setCanva = false;
         int ImgNum = -1;
         int NumIdx =-1;
@@ -30,8 +30,9 @@ namespace UIProj
             {
                 if (taskMod == true || ImgNum!=-1)
                 {
-                    LinRule rule = new LinRule(imgs);
-                    rule.BuildRules(gamma, omega);
+                    Utilities.PrepareToDraw();
+                    LinRule linRules = new LinRule(imgs);
+                    linRules.BuildRules(gamma, omega);
                     setCanva = false;
                 }
             }
@@ -47,6 +48,7 @@ namespace UIProj
             cf.ShowDialog();
             omega = cf.omega;
             gamma = cf.gamma;
+            Utilities.isMulti = cf.isMulti;
         }
         private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -125,6 +127,10 @@ namespace UIProj
             }
             ImgNum = 1;
             NumIdx = 1;
+        }
+        private void NextButton_Click(object sender, EventArgs e)
+        {
+            Utilities.iterDone.Set();
         }
     }
 }
