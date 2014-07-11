@@ -1,0 +1,4 @@
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\bin\Release\GraphicsLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\bin\Release\GraphicsLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\obj\Release\GraphicsLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\obj\Release\GraphicsLib.pdb
