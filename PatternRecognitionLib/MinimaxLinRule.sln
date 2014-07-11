@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternRecognitionLib", "Pa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIProj", "UIProj\UIProj.csproj", "{C000210F-1DCD-424F-A36D-71A831EDF008}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicsLib", "GraphicsLib\GraphicsLib.csproj", "{CC28EE1F-C11A-45E9-82A4-D64B711B0C42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C000210F-1DCD-424F-A36D-71A831EDF008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C000210F-1DCD-424F-A36D-71A831EDF008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C000210F-1DCD-424F-A36D-71A831EDF008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC28EE1F-C11A-45E9-82A4-D64B711B0C42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC28EE1F-C11A-45E9-82A4-D64B711B0C42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC28EE1F-C11A-45E9-82A4-D64B711B0C42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC28EE1F-C11A-45E9-82A4-D64B711B0C42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

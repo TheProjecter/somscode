@@ -11,11 +11,16 @@ namespace PatternRecognitionLib
     //Класс линейного решающего правила минимакса
     public class MinMaxRule
     {
+        #region Private Fields
         private Image X, Y;
         private vectorObject x0, y0;
         private vectorObject W;
+        #endregion
+        #region Public Fields
         public double gamma;
         public double omega;
+        #endregion
+        #region Consructor
         public MinMaxRule(Image _X, Image _Y)
         {
             X = _X; 
@@ -23,6 +28,8 @@ namespace PatternRecognitionLib
             x0 = X[0]; 
             y0 = Y[0];
         }
+        #endregion
+        #region Public Methods
         public void BuildRule()
         {
             List<object> drawList = new List<object>();
@@ -74,7 +81,7 @@ namespace PatternRecognitionLib
             Utilities.mainlist.Add(drawList);
             Utilities.drawDone.Set();
         }
-
+        #endregion
         #region Функции алгоритма
         //Поиск Xp и Yq
         private void FindMaxPrs(ref vectorObject xp, ref vectorObject yq)
@@ -82,7 +89,8 @@ namespace PatternRecognitionLib
             List<object> drawPList = new List<object>();
             drawPList.Add(X);
             drawPList.Add(Y);
-
+            vectorObject[] xy0 = { x0, y0 };
+            drawPList.Add(xy0);
             double max = 0;
             for(int i=0; i<X.Count; i++)
             {
@@ -271,8 +279,10 @@ namespace PatternRecognitionLib
     //Класс-менеджер библиотеки
     public class LinRule
     {
-        List<MinMaxRule> mxRuleList = new List<MinMaxRule>();
-
+        #region Private Fields
+        private List<MinMaxRule> mxRuleList = new List<MinMaxRule>();
+        #endregion
+        #region Constructor
         public LinRule(Image[] imgs)
         {
             for (int i = 0; i < imgs.Count(); i++)
@@ -284,7 +294,8 @@ namespace PatternRecognitionLib
                 }
             }
         }
-
+        #endregion
+        #region Public Methods
         public void BuildRules(double gamma, double omega)
         {
             foreach(MinMaxRule rule in mxRuleList)
@@ -295,5 +306,6 @@ namespace PatternRecognitionLib
                 mathTread.Start();
             }
         }
+        #endregion
     }
 }
