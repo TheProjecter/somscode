@@ -10,3 +10,10 @@ C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.csproj.GenerateResource.Cache
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.exe
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\GraphicsLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\GraphicsLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\Interop.AcroPDFLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\UIProj.csproj.ResolveComReference.cache
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\Interop.AcroPDFLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Release\AxInterop.AcroPDFLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Release\AxInterop.AcroPDFLib.dll

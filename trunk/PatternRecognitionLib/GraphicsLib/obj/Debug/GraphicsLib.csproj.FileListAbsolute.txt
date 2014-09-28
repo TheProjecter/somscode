@@ -1,0 +1,5 @@
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\bin\Debug\GraphicsLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\bin\Debug\GraphicsLib.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\obj\Debug\GraphicsLib.csprojResolveAssemblyReference.cache
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\obj\Debug\GraphicsLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\GraphicsLib\obj\Debug\GraphicsLib.pdb
