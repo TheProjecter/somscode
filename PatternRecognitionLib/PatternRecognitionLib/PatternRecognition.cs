@@ -44,13 +44,20 @@ namespace PatternRecognitionLib
 
             vectorObject x1;
             vectorObject y1;
+            vectorObject[] XXPcrds = new vectorObject[2];
+            vectorObject[] YYQcrds = new vectorObject[2];
+            vectorObject[] XYcrds1 = new vectorObject[2];
+            vectorObject[] G;
             
             while (true)
             {
-                vectorObject xp = new vectorObject(x0.Size);
-                vectorObject yq = new vectorObject(y0.Size);
+                vectorObject xp = null;
+                vectorObject yq = null;
 
                 FindMaxPrs(ref xp, ref yq);
+
+                if (xp == x0 || yq == y0)
+                    break;
 
                 x1 = new vectorObject(x0.Size);
                 y1 = new vectorObject(y0.Size);
@@ -58,10 +65,13 @@ namespace PatternRecognitionLib
                 FindMinLength(ref xp, ref yq, ref x1, ref y1);
                 W = FindHyperplane(x1, y1);
 
-                vectorObject[] XXPcrds = {x0, xp};
-                vectorObject[] YYQcrds = {y0, yq};
-                vectorObject[] XYcrds1 = {x1, y1};
-                vectorObject[] G = Utilities.GetNewCoords(W, x1, y1);
+                XXPcrds[0] = x0;
+                XXPcrds[1] = xp;
+                YYQcrds[0] = y0;
+                YYQcrds[1] = yq;
+                XYcrds1[0] = x1;
+                XYcrds1[1] = y1;
+                G = Utilities.GetNewCoords(W, x1, y1);
                 if (Utilities.Boards[0].cellsize > 1)
                 {
                     XXPcrds = Utilities.GetNewCoords(x0, xp);  //Получаем координаты для отрисовки
@@ -181,6 +191,22 @@ namespace PatternRecognitionLib
                         Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
                         new Point2f(tmp[0], tmp[1]), new Point2f(crds[0], crds[1])));//рисуем линию от Yi до проекции Yi на прямую (x0,y0)
                     }
+                }
+                try
+                {
+                    int f = xp.Size;
+                }
+                catch(Exception e)
+                {
+                    xp = x0;
+                }
+                try 
+                {
+                    int f = yq.Size;
+                }
+                catch(Exception e)
+                {
+                    yq = y0;
                 }
                 Utilities.Boards[Utilities.Boards.Count - 1].Draw(Utilities.Boards[0].cellsize);
                 Utilities.drawDone.Set();
