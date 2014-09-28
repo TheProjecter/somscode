@@ -13,7 +13,7 @@ namespace UIProj
     public partial class ConfigForm : Form
     {
         public double gamma = 0.8;
-        public double omega = 0.1;
+        public double delta = 0.1;
         public bool isMulti = true;
         public ConfigForm()
         {
@@ -23,15 +23,15 @@ namespace UIProj
         {
             InitializeComponent();
             gamma = _gamma;
-            omega = _omega;
+            delta = _omega;
             gammaBox.Text = gamma.ToString();
-            omegaBox.Text = omega.ToString();
+            omegaBox.Text = delta.ToString();
         }
 
         private void okButton_Click(object sender, EventArgs e)
         {
             gamma = Double.Parse(gammaBox.Text);
-            omega = Double.Parse(omegaBox.Text);
+            delta = Double.Parse(omegaBox.Text);
             this.Close();
         }
 

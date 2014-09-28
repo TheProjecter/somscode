@@ -8,82 +8,80 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using GraphicsLib;
+using PatternRecognitionLib;
 
-namespace PatternRecognitionLib
+namespace Util
 {
     //Класс мэнеджер вспомогательных классов
     public class Utilities
     {
-        static public bool isMulti = true;
-        static public List<List<object>> mainlist = new List<List<object>>();
+        public static List<GraphicsBoard> Boards = new List<GraphicsBoard>();
         static public ManualResetEvent drawDone =
             new ManualResetEvent(false);
-        static public ManualResetEvent iterDone =
+        static public ManualResetEvent nextStep =
             new ManualResetEvent(false);
+        static public bool multi = true;
+        static public bool drawing = true;
+        static Thread drawThread;
+        static object DrawBox;
         #region Фунции работы с файлами
-        static public Image[] ReadTask()
+        static public SetOfSigns[] ReadTask(out int cellsize)
         {
-            return Parser.ReadTask();
+            return Parser.ReadTask(out cellsize);
         }
-        static public void WriteTask(Image[] imgs)
+        static public void WriteTask(SetOfSigns[] imgs, int cellsize)
         {
-            Parser.WriteTask(imgs);
+            Parser.WriteTask(imgs, cellsize);
+        }
+        static public void SaveScreen(Bitmap bmp)
+        {
+            SaveFileDialog sf = new SaveFileDialog();
+            sf.Title = "Сохранить как...";
+            sf.Filter = "BMP|*.bmp";
+            if (sf.ShowDialog() == DialogResult.OK)
+            {
+                bmp.Save(sf.FileName);
+            }
         }
         #endregion
-        #region Функции работы с графикой
-        static public void SetCanva(object canva, bool UseDefaultCellSize, int cellNum = 0)
-        {
-            Drawer.SetCanva(canva, UseDefaultCellSize, cellNum);
-        }
-        static public int GetCellNum2D(Image[] imgs)
-        {
-            float mX = 0;
-            float mY = 0;
-            for (int i=0; i<imgs.Count(); i++)
-            {
-                for(int j=0; j<imgs[i].Count; j++)
-                {
-                    if (Math.Abs(imgs[i][j][0])>mX)
-                    {
-                        mX = Math.Abs(imgs[i][j][0]);
-                    }
-                    if (imgs[i][j][1]>mY)
-                    {
-                        mY = Math.Abs(imgs[i][j][1]);
-                    }
-                }
-            }
-            if (mX>mY)
-            { 
-                return (int)(2*mX+1);
-            }
-            else
-            {
-                return (int)(2*mY+1);
-            }
-        }
-        static public void ReCanva()
-        {
-            Drawer.ReDrawCanva();
-        }
-        static public void DrawImage2D(Image img, Pen pen)
-        {
-            Drawer.DrawImage2D(img, pen);
-        }
+        #region Функции для работы с графикой
         static public vectorObject[] GetNewCoords(vectorObject w, vectorObject x1, vectorObject y1)
         {
+            vectorObject p = new vectorObject((x1[0] + y1[0]) / 2, (x1[1] + y1[1]) / 2);
+            float A = y1[0] - x1[0];
+            float B = y1[1] - x1[1];
+            float C = -(A * p[0] + B * p[1]);
+
+            float[] p4 = new float[2];
+
+            p4[0] = -Utilities.Boards[0].Width / 2;
+            p4[1] = -(A * p4[0] + C) / B;
+
+            float[] p3 = { Utilities.Boards[0].Width / 2, -(A * (Utilities.Boards[0].Width / 2) + C) / B };
+
+            vectorObject[] be = new vectorObject[2];
+
+            be[0] = new vectorObject(p3);
+            be[1] = new vectorObject(p4);
+
+            return be;
+        }
+        static public vectorObject[] GetNewCoords2(vectorObject w, vectorObject x1, vectorObject y1)
+        {
+
             vectorObject[] be = new vectorObject[2];
 
             be[0] = x1 + y1;
             float a = (w * be[0]) / 2;
-            float yk = (a - w[0] * Drawer.Size[0]) / w[1];
+            float yk = (a - w[0] * Boards[0].Width) / w[1];
             float y0 = a / w[1];
 
             be[0] = new vectorObject(0, y0);
-            be[1] = new vectorObject(Drawer.Size[0], yk);
+            be[1] = new vectorObject(Boards[0].Width, yk);
 
-            be[0] = Drawer.ReCoord2D(be[0]);
-            be[1] = Drawer.ReCoord2D(be[1]);
+            be[0] = ReCoord2D(be[0]);
+            be[1] = ReCoord2D(be[1]);
 
             return be;
         }
@@ -91,173 +89,98 @@ namespace PatternRecognitionLib
         {
             vectorObject[] be = new vectorObject[2];
 
-            be[0]=Drawer.ReCoord2D(x);
-            be[1] = Drawer.ReCoord2D(y);
+            be[0] = ReCoord2D(x);
+            be[1] = ReCoord2D(y);
 
             return be;
         }
-        static public void DrawLine2D(bool dash, params vectorObject[] points)
+        /// <summary> Превращает нормальные координаты в координаты для отрисовки </summary>
+        static public vectorObject ReCoord2D(vectorObject OldCoord)
         {
-            if (dash == true)
-            {
-                Drawer.DrawPoint((float)(Drawer.Center[0] + (points[0][0] * Drawer.CellSize) - 2),
-                    (float)(Drawer.Center[1] + (points[0][1] * Drawer.CellSize) - 2), Pens.DarkGoldenrod, 4);
-                Drawer.DrawPoint((float)(Drawer.Center[0] + (points[1][0] * Drawer.CellSize) - 2),
-                    (float)(Drawer.Center[1] + (points[1][1] * Drawer.CellSize) - 2), Pens.DarkGoldenrod, 4);
-                Drawer.DrawDashLine2D((float)(Drawer.Center[0] + (points[0][0] * Drawer.CellSize)),
-                    (float)(Drawer.Center[1] + (points[0][1] * Drawer.CellSize)),
-                    (float)(Drawer.Center[0] + (points[1][0] * Drawer.CellSize)),
-                    (float)(Drawer.Center[1] + (points[1][1] * Drawer.CellSize)));
-            }
-            else
-            {
-                Drawer.DrawLine2D((float)(Drawer.Center[0] + (points[0][0] * Drawer.CellSize)),
-                   (float)(Drawer.Center[1] + (points[0][1] * Drawer.CellSize)),
-                   (float)(Drawer.Center[0] + (points[1][0] * Drawer.CellSize)),
-                   (float)(Drawer.Center[1] + (points[1][1] * Drawer.CellSize)));
-            }
-        }
-        static public vectorObject SetVector(int x, int y, Pen pen)
-        {
-            vectorObject tmp = Drawer.GetCoords2D((float)x, (float)y);
+            vectorObject NewCoord = new vectorObject(OldCoord.Size);
 
-            Drawer.DrawPoint((float)(Drawer.Center[0] + (tmp[0] * Drawer.CellSize) - 2),
-                    (float)(Drawer.Center[1] + (tmp[1] * Drawer.CellSize) - 2), pen, 2);
+            NewCoord[0] = OldCoord[0];
+            NewCoord[1] = -OldCoord[1];
+
+            return NewCoord;
+        }
+        /// <summary> Определяет координатную четверть</summary>
+        static public vectorObject GetCoords2D(float x, float y)
+        {
+            vectorObject tmp = new vectorObject(2);
+
+            tmp[0] = x - Boards[0].Width / 2;
+            tmp[1] = y - Boards[0].Height / 2;
 
             return tmp;
         }
-        static public void StartDrawer()
+        /// <summary> Определяет координатную четверть</summary>
+        static public vectorObject GetCoords2D(vectorObject vec)
         {
-            try
+            vectorObject tmp = new vectorObject(2);
+
+            tmp[0] = vec[0] - Boards[0].Width / 2;
+            tmp[1] = vec[1] - Boards[0].Height / 2;
+
+            return tmp;
+        }
+        /// <summary> Задаем вектор объект</summary>
+        static public vectorObject SetVector(int x, int y)
+        {
+            vectorObject tmp = GetCoords2D((float)x, (float)y);
+
+            return tmp;
+        }
+        static public void PrepareToDraw(object drawBox)
+        {
+            DrawBox = drawBox;
+            drawThread = new Thread(DrawFunc);
+            drawThread.Start();
+        }
+        static void DrawFunc()
+        {
+            while (drawing)
             {
-                while (true)
+                drawDone.WaitOne();
+                lock (Boards)
                 {
-                    drawDone.WaitOne();
-                    for (int i = 0; i < mainlist.Count; i++)
-                    {
-                        if (i % 2 == 0)
-                            DrawFromList2D(mainlist[i], true);
-                        else
-                            DrawFromList2D(mainlist[i], false);
-                    }
-                    drawDone.Reset();
+                    ((PictureBox)DrawBox).Invalidate();
                 }
+                drawDone.Reset();
             }
-            catch (Exception e)
-            {
-            }
-        }
-        static public void PrepareToDraw()
-        {
-            Thread drawTread = new Thread(StartDrawer);
-            drawTread.Start();
-        }
-        static public void DrawFromList2D(List<object> drawList, bool iterationClearning)
-        {
-                ClearWindow();
-                DrawImage2D((Image)(drawList[0]), Pens.Blue);
-                DrawImage2D((Image)(drawList[1]), Pens.Red);
-                for (int i = 2; i < drawList.Count; i++)
-                {
-                    if (!isMulti)
-                    {
-                        iterDone.WaitOne();
-                    }
-                    if (iterationClearning)
-                    {
-                        ClearWindow();
-                        DrawImage2D((Image)(drawList[0]), Pens.Blue);
-                        DrawImage2D((Image)(drawList[1]), Pens.Red);
-                        vectorObject[] vect = (vectorObject[])drawList[2];
-                        DrawLine2D(true, GetNewCoords(vect[0], vect[1]));
-                    }
-                    #region Отрисовка линий
-                    try
-                    {
-                        vectorObject[] vect = (vectorObject[])drawList[i];
-                        if (Drawer.CellSize != 1)
-                        {
-                            if (vect != null & vect.Count() == 2)
-                            {
-                                DrawLine2D(true, GetNewCoords(vect[0], vect[1]));
-                            }
-                            else
-                            {
-                                if (vect != null & vect.Count() == 3)
-                                {
-                                    DrawLine2D(false, GetNewCoords(vect[0], vect[1], vect[2]));
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (vect != null & vect.Count() == 2)
-                            {
-                                DrawLine2D(true, vect[0], vect[1]);
-                            }
-                            else
-                            {
-                                if (vect != null & vect.Count() == 3)
-                                {
-                                    vectorObject[] be = new vectorObject[2];
-
-                                    be[0] = vect[1] + vect[2];
-                                    float a = (vect[0] * be[0]) / 2;
-                                    float yk = (a - vect[0][0] * (Drawer.Size[0] / 2)) / vect[0][1];
-                                    float y0 = (a - vect[0][0] * (-Drawer.Size[0] / 2)) / vect[0][1];
-
-                                    be[0] = new vectorObject(-Drawer.Size[0] / 2, y0);
-                                    be[1] = new vectorObject(Drawer.Size[0] / 2, yk);
-
-                                    DrawLine2D(false, be[0], be[1]);
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    { }
-                    #endregion
-                    if (isMulti)
-                        Thread.Sleep(1000);
-                    if(!isMulti)
-                    {
-                        iterDone.Reset();
-                    }
-                }
-        }
-        static public void ClearWindow()
-        {
-            Drawer.clr();
         }
         #endregion
     }
     //Класс загрузки/сохранения примера
     class Parser
     {
-        static public Image[] ReadTask()
+        static public SetOfSigns[] ReadTask(out int cellsize)
         {
-            Image[] imgs;
+            SetOfSigns[] imgs;
             OpenFileDialog of = new OpenFileDialog();
             of.Title = "Выберите файл";
             of.Filter = "Текстовые файлы|*.txt";
 
+            cellsize = 1;
+
             if (of.ShowDialog() == DialogResult.OK)
             {
                 TextReader tr = new StreamReader(of.FileName);
+                cellsize = Int32.Parse(NextString(tr));
                 int n = Int32.Parse(NextString(tr));
-                imgs = new Image[n];
+                imgs = new SetOfSigns[n];
                 for (int i = 0; i < n; i++)
                 {
                     string tmp = NextString(tr);
                     string[] objs = tmp.Split(';');
-                    imgs[i] = new Image(objs.Count() - 1);
+                    imgs[i] = new SetOfSigns(objs.Count() - 1);
                     for (int j = 0; j < objs.Count() - 1; j++)
                     {
                         string[] coords = objs[j].Split(',');
                         float[] crds = new float[coords.Count()];
                         for (int k = 0; k < crds.Count(); k++)
                         {
-                            crds[k] =  float.Parse(coords[k]);
+                            crds[k] = float.Parse(coords[k]);
                         }
                         imgs[i][j] = new vectorObject(crds);
                     }
@@ -277,7 +200,7 @@ namespace PatternRecognitionLib
             }
             return tmp;
         }
-        static public void WriteTask(Image[] imgs)
+        static public void WriteTask(SetOfSigns[] imgs,int cellsize)
         {
             if (imgs != null)
             {
@@ -289,8 +212,10 @@ namespace PatternRecognitionLib
                 {
                     TextWriter tw = new StreamWriter(sf.FileName);
                     tw.WriteLine("//число образов");
+                    tw.WriteLine(cellsize);
+                    tw.WriteLine("//число образов");
                     tw.WriteLine(imgs.Count());
-                    for(int i=0; i<imgs.Count(); i++)
+                    for (int i = 0; i < imgs.Count(); i++)
                     {
                         tw.WriteLine("//image" + (i + 1));
                         tw.WriteLine(imgs[i].ToString());
@@ -301,127 +226,55 @@ namespace PatternRecognitionLib
         }
     }
 
-    //Класс работы с графикой
-    class Drawer
+    class MathUtils
     {
-        #region Поля класса отрисовки
-        static object canva;
-        static Graphics gs;
-        static int cellSize = 1;
-        static vectorObject center = new vectorObject(2);
-        static int[] size = new int[2];
-        public static int[] Size
+        static float det(float a1, float a2, float b1, float b2)
         {
-            get { return size; }
+            return (float)(a1 * b2 - a2 * b1);
         }
-        public static vectorObject Center
+        static void input(float[] p1, float[] p2, out float a, out float b, out float c)
         {
-            get { return center; }
+            float x0 = p1[0];
+            float y0 = p1[1];
+            float x1 = p2[0];
+            float y1 = p2[1];
+            a = y1 - y0;
+            b = x0 - x1;
+            c = -((x1 - x0) * y0 - (y1 - y0) * x0);
         }
-        public static int CellSize
+        static public float[] SegmentCross(float[] p1, float[] p2, float[] p3, float[] p4)
         {
-            get { return cellSize; }
-        }
-        #endregion
-        #region Методы отрисовки
-        static public void SetCanva(object _canva, bool UseDefaultCellSize, int cellNum)
-        {
-            canva = _canva;
-            try
-            {
-                PictureBox pBox = (PictureBox)canva;
-                cellSize = 1;
-                if (UseDefaultCellSize != true)
-                {
-                    int min = 0;
-                    if (pBox.Height < pBox.Width)
-                    {
-                        min = pBox.Height;
-                    }
-                    else
-                    {
-                        min = pBox.Width;
-                    }
-                    cellSize = min / cellNum;
-                }
-                size[0] = pBox.Width;
-                size[1] = pBox.Height;
-                gs = pBox.CreateGraphics();
-                clr();
-                center[0] = size[0]/2;
-                center[1] = size[1]/2;
-                DrawLine2D(center[0], 0, center[0], size[1]);
-                DrawLine2D(0, center[1], size[0], center[1]);
-            }
-            catch (Exception e)
-            { }
-            
-        }
-        static public void ReDrawCanva()
-        {
-            DrawLine2D(center[0], 0, center[0], size[1]);
-            DrawLine2D(0, center[1], size[0], center[1]);
-        }
-        static public void DrawImage2D(Image img, Pen pen)
-        {
-            if (cellSize != 1)
-                for (int i = 0; i < img.Count; i++)
-                {
-                    DrawPoint((float)(center[0] + (ReCoord2D(img[i])[0] * cellSize) - 2),
-                        (float)(center[1] + (ReCoord2D(img[i])[1] * cellSize) - 2), pen, 2);
-                }
-            else
-                for (int i = 0; i < img.Count; i++)
-                {
-                    DrawPoint((float)(center[0] + (img[i][0] * cellSize) - 2),
-                        (float)(center[1] + (img[i][1] * cellSize) - 2), pen, 2);
-                }
-        }
-        static public void DrawPoint(float x, float y, Pen _pen, float width)
-        {
-            Pen pen = new Pen(_pen.Color, width);
-            gs.DrawEllipse(pen, x, y, 4 , 4);
-        }
-        static public void DrawLine2D(float x1, float y1, float x2, float y2)
-        {
-            Pen pen = new Pen(Brushes.Black, 2);
+            float[] arr1 = new float[3];
+            float[] arr2 = new float[3];
+            input(p1, p2, out arr1[0], out arr1[1], out arr1[2]);
+            input(p3, p4, out arr2[0], out arr2[1], out arr2[2]);
 
-            gs.DrawLine(pen, x1, y1, x2, y2);
+            float d = det(arr1[0], arr1[1], arr2[0], arr2[1]);
+            float d1 = det(arr1[2], arr1[1], arr2[2], arr2[1]);
+            float d2 = det(arr1[0], arr1[2], arr2[0], arr2[2]);
+
+            float[] rez = { (float)d1 / d, (float)d2 / d };
+
+            return rez;
         }
-        static public void DrawDashLine2D(float x1, float y1, float x2, float y2)
+        static public vectorObject LineCross(vectorObject x0, vectorObject y0, vectorObject p)
         {
-            Pen pen = new Pen(Brushes.Black, 1);
-            pen.DashStyle = DashStyle.Dash;
+            float A = y0[0] - x0[0];
+            float B = y0[1] - x0[1];
+            float C = -(A * p[0] + B * p[1]);
 
-            gs.DrawLine(pen, x1, y1, x2, y2);
+            float[] p4 = new float[2];
+
+            p4[0] = -Utilities.Boards[0].Width/2;
+            p4[1] = -(A * p4[0] + C) / B;
+
+            float[] p1 = {x0[0], x0[1]};
+            float[] p2 = {y0[0], y0[1]};
+            float[] p3 = { Utilities.Boards[0].Width / 2, -(A * (Utilities.Boards[0].Width / 2) + C) / B };
+
+            vectorObject rez = new vectorObject(SegmentCross(p1, p2, p3, p4));
+
+            return rez;
         }
-        static public vectorObject GetCoords2D(float x, float y)
-        {
-            vectorObject tmp = new vectorObject(2);
-
-            tmp[0] = x - center[0];
-            tmp[1] = y - center[1];
-
-            return tmp;
-        }
-        static public void clr()
-        {
-            gs.Clear(Color.White);
-            DrawLine2D(center[0], 0,center[0], size[1]);
-            DrawLine2D(0, center[1], size[0],center[1]);
-        }
-        static public vectorObject ReCoord2D(vectorObject OldCoord)
-        {
-            vectorObject NewCoord = new vectorObject(OldCoord.Size);
-
-            NewCoord[0] = OldCoord[0];
-            if (OldCoord[1] > 0)
-                NewCoord[1] = - OldCoord[1];
-            else
-                NewCoord[1] = - OldCoord[1];
-
-            return NewCoord;
-        }
-        #endregion
     }
 }

@@ -1,7 +1,9 @@
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\UIProj.exe.config
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\UIProj.exe
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\UIProj.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\GraphicsLib.dll
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\PatternRecognitionLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\GraphicsLib.pdb
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\PatternRecognitionLib.pdb
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.csprojResolveAssemblyReference.cache
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.ConfigForm.resources
@@ -10,3 +12,8 @@ C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.csproj.GenerateResource.Cache
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.exe
 C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.pdb
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\Interop.AcroPDFLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\AxInterop.AcroPDFLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\obj\Debug\UIProj.csproj.ResolveComReference.cache
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\Interop.AcroPDFLib.dll
+C:\Users\Viacheslav\Documents\Visual Studio 2013\Projects\PatternRecognitionProj\UIProj\bin\Debug\AxInterop.AcroPDFLib.dll

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using GraphicsLib;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Util;
 
 namespace PatternRecognitionLib
 {
@@ -12,16 +15,16 @@ namespace PatternRecognitionLib
     public class MinMaxRule
     {
         #region Private Fields
-        private Image X, Y;
+        private SetOfSigns X, Y;
         private vectorObject x0, y0;
         private vectorObject W;
         #endregion
         #region Public Fields
         public double gamma;
-        public double omega;
+        public double delta;
         #endregion
         #region Consructor
-        public MinMaxRule(Image _X, Image _Y)
+        public MinMaxRule(SetOfSigns _X, SetOfSigns _Y)
         {
             X = _X; 
             Y = _Y; 
@@ -32,14 +35,18 @@ namespace PatternRecognitionLib
         #region Public Methods
         public void BuildRule()
         {
-            List<object> drawList = new List<object>();
+            
+            Utilities.Boards.Add(new GraphicsBoard(Utilities.Boards[0].Width, Utilities.Boards[0].Height,
+                Utilities.Boards[0].Graphics));  //инициализируем класс-список объектов текущего состояния экрана
+            Utilities.Boards[Utilities.Boards.Count - 1].AddElem(Utilities.Boards[0]);  //Добавляем на экран отображение точек множеств
+            Pen dpen = new Pen(Brushes.Black, 2);
+            dpen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash; //пунктирная линия
+
             vectorObject x1;
             vectorObject y1;
+            
             while (true)
             {
-                drawList.Add(X);
-                drawList.Add(Y);
-
                 vectorObject xp = new vectorObject(x0.Size);
                 vectorObject yq = new vectorObject(y0.Size);
 
@@ -49,16 +56,38 @@ namespace PatternRecognitionLib
                 y1 = new vectorObject(y0.Size);
 
                 FindMinLength(ref xp, ref yq, ref x1, ref y1);
-                vectorObject[] x = { x0, xp };
-                vectorObject[] y = { y0, yq };
-                drawList.Add(x);
-                drawList.Add(y);
                 W = FindHyperplane(x1, y1);
-                vectorObject[] vect1 = { x1, y1 };
-                drawList.Add(vect1);
-                vectorObject[] vect2 = { W, x1, y1 };
-                drawList.Add(vect2);
-                if (IsSeparating(omega))
+
+                vectorObject[] XXPcrds = {x0, xp};
+                vectorObject[] YYQcrds = {y0, yq};
+                vectorObject[] XYcrds1 = {x1, y1};
+                vectorObject[] G = Utilities.GetNewCoords(W, x1, y1);
+                if (Utilities.Boards[0].cellsize > 1)
+                {
+                    XXPcrds = Utilities.GetNewCoords(x0, xp);  //Получаем координаты для отрисовки
+                    YYQcrds = Utilities.GetNewCoords(y0, yq);
+                    XYcrds1 = Utilities.GetNewCoords(x1, y1);
+                    G = Utilities.GetNewCoords2(W, x1, y1);
+                }
+                Utilities.Boards.Add(new GraphicsBoard(Utilities.Boards[0].Width, Utilities.Boards[0].Height,
+                            Utilities.Boards[0].Graphics)); //инициализируем класс-список объектов текущего состояния экрана
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(Utilities.Boards[0]); //Добавляем на экран отображение точек множеств
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                    new Point2f(XXPcrds[0][0],XXPcrds[0][1], new Pen(Brushes.Green, 3)), 
+                    new Point2f(XXPcrds[1][0], XXPcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (x0,xp)
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                    new Point2f(YYQcrds[0][0], YYQcrds[0][1], new Pen(Brushes.Green, 3)),
+                    new Point2f(YYQcrds[1][0], YYQcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (y0,yq)
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                    new Point2f(XYcrds1[0][0], XYcrds1[0][1], new Pen(Brushes.Green, 3)),
+                    new Point2f(XYcrds1[1][0], XYcrds1[1][1], new Pen(Brushes.Green, 3))));
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, new Pen(Brushes.Black, 3),
+                    new Point2f(G[0][0], G[0][1]), new Point2f(G[1][0], G[1][1])));
+                Utilities.Boards[Utilities.Boards.Count - 1].Draw(Utilities.Boards[0].cellsize);//прямая (y1,x1)
+                Utilities.drawDone.Set();
+                Thread.Sleep(1500);
+
+                if (IsSeparating(delta))
                 {
                     if (IsRightPlane(x1, y1))
                     {
@@ -74,54 +103,94 @@ namespace PatternRecognitionLib
                 {
                     break;
                 }
-                List<object> tmp = new List<object>(drawList);
-                Utilities.mainlist.Add(tmp);
-                drawList.Clear();
+                if (!Utilities.multi)
+                {
+                    Utilities.nextStep.WaitOne();
+                    Utilities.nextStep.Reset();
+                }
             }
-            Utilities.mainlist.Add(drawList);
-            Utilities.drawDone.Set();
         }
         #endregion
         #region Функции алгоритма
         //Поиск Xp и Yq
         private void FindMaxPrs(ref vectorObject xp, ref vectorObject yq)
         {
-            List<object> drawPList = new List<object>();
-            drawPList.Add(X);
-            drawPList.Add(Y);
-            vectorObject[] xy0 = { x0, y0 };
-            drawPList.Add(xy0);
-            double max = 0;
-            for(int i=0; i<X.Count; i++)
+            Pen dpen = new Pen(Brushes.Black, 2);
+            dpen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash; //пунктирная линия
+            
+            double maxX = 0;
+            double maxY = 0;
+            for (int i = 0; i < Math.Max(X.Count, Y.Count); i++)
             {
-                if ((X[i] - x0) * (y0 - x0) > max)
+                Utilities.Boards.Add(new GraphicsBoard(Utilities.Boards[0].Width, Utilities.Boards[0].Height,
+                            Utilities.Boards[0].Graphics)); //инициализируем класс-список объектов текущего состояния экрана
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(Utilities.Boards[0]); //Добавляем на экран отображение точек множеств
+                vectorObject Xcrds = x0;
+                vectorObject Ycrds = y0;
+                if (Utilities.Boards[0].cellsize > 1)
                 {
-                    max = (X[i] - x0) * (y0 - x0);
-                    xp = X[i];
+                    Xcrds = Utilities.ReCoord2D(x0); //Получаем координаты для отрисовки
+                    Ycrds = Utilities.ReCoord2D(y0);
                 }
-                if (x0 != X[i])
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Point2f(Xcrds[0], Xcrds[1],
+                    new Pen(Brushes.HotPink, 3))); //добавляем на экран точку x0
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Point2f(Ycrds[0], Ycrds[1],
+                    new Pen(Brushes.HotPink, 3))); //добавляем на экран точку y0
+                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, new Pen(Brushes.Orchid, 2), 
+                    new Point2f(Xcrds[0], Xcrds[1]), new Point2f(Ycrds[0], Ycrds[1]))); // рисуем линию от x0 до y0
+                if (i < X.Count)
                 {
-                    vectorObject[] vect = { x0, X[i] };
-                    drawPList.Add(vect);
+                    if ((X[i] - x0) * (y0 - x0) > maxX)
+                    {
+                        maxX = (X[i] - x0) * (y0 - x0);
+                        xp = X[i];
+                    }
+                    if (x0 != X[i])
+                    {
+                        vectorObject crds = MathUtils.LineCross(x0, y0, X[i]);
+                        vectorObject tmp = X[i];
+                        if (Utilities.Boards[0].cellsize > 1)
+                        {
+                            crds = Utilities.ReCoord2D(crds);
+                            tmp = Utilities.ReCoord2D(X[i]);
+                        }
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, new Pen(Brushes.Black, 2),
+                        new Point2f(Xcrds[0], Xcrds[1]), new Point2f(tmp[0], tmp[1])));//рисуем линию от x0 до Xi
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                        new Point2f(tmp[0], tmp[1]), new Point2f(crds[0], crds[1])));//рисуем линию от Xi до проекции Xi на прямую (x0,y0)
+                    }
+                }
+                if (i < Y.Count)
+                {
+                    if ((Y[i] - y0) * (x0 - y0) > maxY)
+                    {
+                        maxY = (Y[i] - y0) * (x0 - y0);
+                        yq = Y[i];
+                    }
+                    if (y0 != Y[i])
+                    {
+                        vectorObject crds = MathUtils.LineCross(x0, y0, Y[i]);
+                        vectorObject tmp = Y[i];
+                        if (Utilities.Boards[0].cellsize > 1)
+                        {
+                            crds = Utilities.ReCoord2D(crds);
+                            tmp = Utilities.ReCoord2D(Y[i]);
+                        }
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, new Pen(Brushes.Black, 2),
+                        new Point2f(Ycrds[0], Ycrds[1]), new Point2f(tmp[0], tmp[1])));//рисуем линию от y0 до Yi
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                        new Point2f(tmp[0], tmp[1]), new Point2f(crds[0], crds[1])));//рисуем линию от Yi до проекции Yi на прямую (x0,y0)
+                    }
+                }
+                Utilities.Boards[Utilities.Boards.Count - 1].Draw(Utilities.Boards[0].cellsize);
+                Utilities.drawDone.Set();
+                Thread.Sleep(1000);
+                if (!Utilities.multi)
+                {
+                    Utilities.nextStep.WaitOne();
+                    Utilities.nextStep.Reset();
                 }
             }
-
-            max = 0;
-
-            for (int i = 0; i < Y.Count; i++)
-            {
-                if ((Y[i] - y0) * (x0 - y0) > max)
-                {
-                    max = (Y[i] - y0) * (x0 - y0);
-                    yq = Y[i];
-                }
-                if (y0 != Y[i])
-                {
-                    vectorObject[] vect = { y0, Y[i] };
-                    drawPList.Add(vect);
-                }
-            }
-            Utilities.mainlist.Add(drawPList);
         }
 
         //Вычисляем коэфициенты по т. Куна-Такера
@@ -246,15 +315,37 @@ namespace PatternRecognitionLib
             return true;
         }
 
-        private bool IsSeparating(double omega)
+        //Не помню, что проверяет, но что-то проверяет..............
+        private bool IsSeparating(double delta)
         {
-            return (W.Norm() > omega);
+            return (W.Norm() > delta);
         }
         
         //Критерий останова
         private bool StoppingCriterion(vectorObject x1, vectorObject y1, double gamma)
         {
-            double p = Math.Abs((x1 - y1).Norm());
+            //vectorObject point = new vectorObject((x1[0] + y1[0]) / 2, (x1[1] + y1[1]) / 2);
+            //float A = y1[0] - x1[0];
+            //float B = y1[1] - x1[1];
+            //float C = -(A * point[0] + B * point[1]);
+            //double min = Math.Abs((A * X[0][0] + B * X[0][1] + C) / Math.Sqrt((A * A) - (B * B)));
+
+            double p = (x1-y1).Norm();
+
+            //for (int i = 1; i < X.Count; i++)
+            //{
+            //    if (Math.Abs((A * X[i][0] + B * X[i][1] + C) / Math.Sqrt((A*A) - (B*B))) < min)
+            //    {
+            //        min = Math.Abs((A * X[i][0] + B * X[i][1] + C) / Math.Sqrt((A * A) - (B * B)));
+            //    }
+            //}
+            //for (int i = 0; i < Y.Count; i++)
+            //{
+            //    if (Math.Abs((A * Y[i][0] + B * Y[i][1] + C) / Math.Sqrt((A * A) - (B * B))) < min)
+            //    {
+            //        min = Math.Abs((A * Y[i][0] + B * Y[i][1] + C) / Math.Sqrt((A * A) - (B * B)));
+            //    }
+            //}
             double min = Math.Abs((W * X[0]) / W.Norm());
             for (int i = 0; i < X.Count; i++)
             {
@@ -283,7 +374,7 @@ namespace PatternRecognitionLib
         private List<MinMaxRule> mxRuleList = new List<MinMaxRule>();
         #endregion
         #region Constructor
-        public LinRule(Image[] imgs)
+        public LinRule(SetOfSigns[] imgs)
         {
             for (int i = 0; i < imgs.Count(); i++)
             {
@@ -301,7 +392,7 @@ namespace PatternRecognitionLib
             foreach(MinMaxRule rule in mxRuleList)
             {
                 rule.gamma = gamma;
-                rule.omega = omega;
+                rule.delta = omega;
                 Thread mathTread = new Thread(rule.BuildRule);
                 mathTread.Start();
             }

@@ -41,11 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image.cs" />
+    <Compile Include="SetOfSings.cs" />
     <Compile Include="PatternRecognition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="vectorObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GraphicsLib\GraphicsLib.csproj">
+      <Project>{cc28ee1f-c11a-45e9-82a4-d64b711b0c42}</Project>
+      <Name>GraphicsLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

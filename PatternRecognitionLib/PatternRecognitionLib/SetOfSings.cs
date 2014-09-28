@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace PatternRecognitionLib
 {
-    //Класс образа
-    public class Image
+    //Класс множества признаков
+    public class SetOfSigns
     {
         private vectorObject[] objects;
         private int count;
-        public Image()
+        public SetOfSigns()
         { 
             objects = new vectorObject[2]; 
             count = 2; 
         }
-        public Image(int n)
+        public SetOfSigns(int n)
         { 
             objects = new vectorObject[n]; 
             count = n; 
@@ -25,6 +25,7 @@ namespace PatternRecognitionLib
         public int Count
         {
             get { return count; }
+            set { count = value; }
         }
         public vectorObject this[int ObjN]
         {
@@ -44,7 +45,6 @@ namespace PatternRecognitionLib
                 objects[ObjN] = value;
             }
         }
-
         public string ToString()
         {
             string tmp = "";
