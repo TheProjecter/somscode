@@ -25,6 +25,7 @@ namespace Util
         static public bool drawing = true;
         static Thread drawThread;
         static object DrawBox;
+        static public object MessageBox;
         #region Фунции работы с файлами
         static public SetOfSigns[] ReadTask(out int cellsize)
         {
@@ -100,7 +101,11 @@ namespace Util
             vectorObject NewCoord = new vectorObject(OldCoord.Size);
 
             NewCoord[0] = OldCoord[0];
-            NewCoord[1] = -OldCoord[1];
+
+            if (OldCoord[1] > 0)
+                NewCoord[1] = -OldCoord[1];
+            else
+                NewCoord[1] = -OldCoord[1];
 
             return NewCoord;
         }
@@ -141,13 +146,23 @@ namespace Util
         {
             while (drawing)
             {
-                drawDone.WaitOne();
-                lock (Boards)
+                drawDone.WaitOne(10000);
+                try
                 {
-                    ((PictureBox)DrawBox).Invalidate();
+                    lock (Boards)
+                    {
+                        ((PictureBox)DrawBox).Invalidate();
+                    }
                 }
+                catch(Exception e)
+                { }
                 drawDone.Reset();
             }
+        }
+        static public void Message(string msg)
+        {
+            Label label = (Label)MessageBox;
+            label.Text = msg;
         }
         #endregion
     }
