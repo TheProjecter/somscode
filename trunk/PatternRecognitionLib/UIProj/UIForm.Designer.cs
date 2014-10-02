@@ -47,6 +47,7 @@
             this.startButton = new System.Windows.Forms.ToolStripButton();
             this.nextButton = new System.Windows.Forms.ToolStripButton();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
+            this.messBox = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.drawBox)).BeginInit();
             this.toolStrip.SuspendLayout();
@@ -137,7 +138,7 @@
             this.nextButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(24, 542);
+            this.toolStrip.Size = new System.Drawing.Size(24, 616);
             this.toolStrip.TabIndex = 7;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -212,8 +213,8 @@
             this.nextButton.Image = ((System.Drawing.Image)(resources.GetObject("nextButton.Image")));
             this.nextButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(21, 20);
-            this.nextButton.Text = "Next";
+            this.nextButton.Size = new System.Drawing.Size(29, 20);
+            this.nextButton.Text = "Следующий шаг";
             this.nextButton.Click += new System.EventHandler(this.nextButton_Click);
             // 
             // axAcroPDF1
@@ -225,17 +226,30 @@
             this.axAcroPDF1.Size = new System.Drawing.Size(384, 537);
             this.axAcroPDF1.TabIndex = 8;
             // 
+            // messBox
+            // 
+            this.messBox.AutoSize = true;
+            this.messBox.BackColor = System.Drawing.SystemColors.Menu;
+            this.messBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.messBox.Location = new System.Drawing.Point(27, 567);
+            this.messBox.Name = "messBox";
+            this.messBox.Size = new System.Drawing.Size(394, 13);
+            this.messBox.TabIndex = 9;
+            this.messBox.Text = "Здесь отображается текущее состояние выполнения алгоритма";
+            // 
             // UIForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(1164, 566);
+            this.ClientSize = new System.Drawing.Size(1164, 640);
             this.ControlBox = false;
+            this.Controls.Add(this.messBox);
             this.Controls.Add(this.axAcroPDF1);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.drawBox);
             this.Controls.Add(this.menuStrip);
+            this.Location = new System.Drawing.Point(10, 10);
             this.MainMenuStrip = this.menuStrip;
             this.Name = "UIForm";
             this.Text = "Алгоритм минимакса";
@@ -270,6 +284,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton nextButton;
         private AxAcroPDFLib.AxAcroPDF axAcroPDF1;
+        private System.Windows.Forms.Label messBox;
     }
 }
 

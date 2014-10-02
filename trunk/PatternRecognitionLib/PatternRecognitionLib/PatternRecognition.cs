@@ -47,7 +47,7 @@ namespace PatternRecognitionLib
             vectorObject[] XXPcrds = new vectorObject[2];
             vectorObject[] YYQcrds = new vectorObject[2];
             vectorObject[] XYcrds1 = new vectorObject[2];
-            vectorObject[] G;
+            vectorObject[] G = new vectorObject[2];
             
             while (true)
             {
@@ -57,7 +57,34 @@ namespace PatternRecognitionLib
                 FindMaxPrs(ref xp, ref yq);
 
                 if (xp == x0 || yq == y0)
+                {
+                    try
+                    {
+                        Utilities.Message("Нет новых точек");
+                        Utilities.Boards.Add(new GraphicsBoard(Utilities.Boards[0].Width, Utilities.Boards[0].Height,
+                            Utilities.Boards[0].Graphics)); //инициализируем класс-список объектов текущего состояния экрана
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(Utilities.Boards[0]); //Добавляем на экран отображение точек множеств
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                            new Point2f(XXPcrds[0][0], XXPcrds[0][1], new Pen(Brushes.Green, 3)),
+                            new Point2f(XXPcrds[1][0], XXPcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (x0,xp)
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                            new Point2f(YYQcrds[0][0], YYQcrds[0][1], new Pen(Brushes.Green, 3)),
+                            new Point2f(YYQcrds[1][0], YYQcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (y0,yq)
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                            new Point2f(XYcrds1[0][0], XYcrds1[0][1], new Pen(Brushes.Green, 3)),
+                            new Point2f(XYcrds1[1][0], XYcrds1[1][1], new Pen(Brushes.Green, 3))));
+                        Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, new Pen(Brushes.Black, 3),
+                            new Point2f(G[0][0], G[0][1]), new Point2f(G[1][0], G[1][1])));
+                        Utilities.Boards[Utilities.Boards.Count - 1].Draw(Utilities.Boards[0].cellsize);//прямая (y1,x1)
+                        Utilities.drawDone.Set();
+                        Thread.Sleep(1500);
+                    }
+                    catch(Exception e)
+                    {
+                        Utilities.Message("Нет точек для построения симплекса");
+                    }
                     break;
+                }
 
                 x1 = new vectorObject(x0.Size);
                 y1 = new vectorObject(y0.Size);
@@ -65,52 +92,91 @@ namespace PatternRecognitionLib
                 FindMinLength(ref xp, ref yq, ref x1, ref y1);
                 W = FindHyperplane(x1, y1);
 
-                XXPcrds[0] = x0;
-                XXPcrds[1] = xp;
-                YYQcrds[0] = y0;
-                YYQcrds[1] = yq;
-                XYcrds1[0] = x1;
-                XYcrds1[1] = y1;
-                G = Utilities.GetNewCoords(W, x1, y1);
-                if (Utilities.Boards[0].cellsize > 1)
-                {
-                    XXPcrds = Utilities.GetNewCoords(x0, xp);  //Получаем координаты для отрисовки
-                    YYQcrds = Utilities.GetNewCoords(y0, yq);
-                    XYcrds1 = Utilities.GetNewCoords(x1, y1);
-                    G = Utilities.GetNewCoords2(W, x1, y1);
-                }
-                Utilities.Boards.Add(new GraphicsBoard(Utilities.Boards[0].Width, Utilities.Boards[0].Height,
-                            Utilities.Boards[0].Graphics)); //инициализируем класс-список объектов текущего состояния экрана
-                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(Utilities.Boards[0]); //Добавляем на экран отображение точек множеств
-                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
-                    new Point2f(XXPcrds[0][0],XXPcrds[0][1], new Pen(Brushes.Green, 3)), 
-                    new Point2f(XXPcrds[1][0], XXPcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (x0,xp)
-                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
-                    new Point2f(YYQcrds[0][0], YYQcrds[0][1], new Pen(Brushes.Green, 3)),
-                    new Point2f(YYQcrds[1][0], YYQcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (y0,yq)
-                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
-                    new Point2f(XYcrds1[0][0], XYcrds1[0][1], new Pen(Brushes.Green, 3)),
-                    new Point2f(XYcrds1[1][0], XYcrds1[1][1], new Pen(Brushes.Green, 3))));
-                Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, new Pen(Brushes.Black, 3),
-                    new Point2f(G[0][0], G[0][1]), new Point2f(G[1][0], G[1][1])));
-                Utilities.Boards[Utilities.Boards.Count - 1].Draw(Utilities.Boards[0].cellsize);//прямая (y1,x1)
-                Utilities.drawDone.Set();
-                Thread.Sleep(1500);
-
                 if (IsSeparating(delta))
                 {
                     if (IsRightPlane(x1, y1))
                     {
                         if (StoppingCriterion(x1, y1, gamma))
                         {
+                            Utilities.Message("Найдено линейное разделяющее правило");
+
+                            XXPcrds[0] = x0;
+                            XXPcrds[1] = xp;
+                            YYQcrds[0] = y0;
+                            YYQcrds[1] = yq;
+                            XYcrds1[0] = x1;
+                            XYcrds1[1] = y1;
+                            G = Utilities.GetNewCoords(W, x1, y1);
+                            if (Utilities.Boards[0].cellsize > 1)
+                            {
+                                XXPcrds = Utilities.GetNewCoords(x0, xp);  //Получаем координаты для отрисовки
+                                YYQcrds = Utilities.GetNewCoords(y0, yq);
+                                XYcrds1 = Utilities.GetNewCoords(x1, y1);
+                                G = Utilities.GetNewCoords2(W, x1, y1);
+                            }
+                            Utilities.Boards.Add(new GraphicsBoard(Utilities.Boards[0].Width, Utilities.Boards[0].Height,
+                                        Utilities.Boards[0].Graphics)); //инициализируем класс-список объектов текущего состояния экрана
+                            Utilities.Boards[Utilities.Boards.Count - 1].AddElem(Utilities.Boards[0]); //Добавляем на экран отображение точек множеств
+                            Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                                new Point2f(XXPcrds[0][0], XXPcrds[0][1], new Pen(Brushes.Green, 3)),
+                                new Point2f(XXPcrds[1][0], XXPcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (x0,xp)
+                            Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                                new Point2f(YYQcrds[0][0], YYQcrds[0][1], new Pen(Brushes.Green, 3)),
+                                new Point2f(YYQcrds[1][0], YYQcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (y0,yq)
+                            Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                                new Point2f(XYcrds1[0][0], XYcrds1[0][1], new Pen(Brushes.Green, 3)),
+                                new Point2f(XYcrds1[1][0], XYcrds1[1][1], new Pen(Brushes.Green, 3))));
+                            Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, new Pen(Brushes.Black, 3),
+                                new Point2f(G[0][0], G[0][1]), new Point2f(G[1][0], G[1][1])));
+                            Utilities.Boards[Utilities.Boards.Count - 1].Draw(Utilities.Boards[0].cellsize);//прямая (y1,x1)
+                            Utilities.drawDone.Set();
+                            Thread.Sleep(1500);
+
+                            Utilities.drawing = false;
+                            Thread.Sleep(1500);
                             break;
                         }
                     }
+
+                    XXPcrds[0] = x0;
+                    XXPcrds[1] = xp;
+                    YYQcrds[0] = y0;
+                    YYQcrds[1] = yq;
+                    XYcrds1[0] = x1;
+                    XYcrds1[1] = y1;
+                    G = Utilities.GetNewCoords(W, x1, y1);
+                    if (Utilities.Boards[0].cellsize > 1)
+                    {
+                        XXPcrds = Utilities.GetNewCoords(x0, xp);  //Получаем координаты для отрисовки
+                        YYQcrds = Utilities.GetNewCoords(y0, yq);
+                        XYcrds1 = Utilities.GetNewCoords(x1, y1);
+                        G = Utilities.GetNewCoords2(W, x1, y1);
+                    }
+                    Utilities.Boards.Add(new GraphicsBoard(Utilities.Boards[0].Width, Utilities.Boards[0].Height,
+                                Utilities.Boards[0].Graphics)); //инициализируем класс-список объектов текущего состояния экрана
+                    Utilities.Boards[Utilities.Boards.Count - 1].AddElem(Utilities.Boards[0]); //Добавляем на экран отображение точек множеств
+                    Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                        new Point2f(XXPcrds[0][0], XXPcrds[0][1], new Pen(Brushes.Green, 3)),
+                        new Point2f(XXPcrds[1][0], XXPcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (x0,xp)
+                    Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                        new Point2f(YYQcrds[0][0], YYQcrds[0][1], new Pen(Brushes.Green, 3)),
+                        new Point2f(YYQcrds[1][0], YYQcrds[1][1], new Pen(Brushes.Green, 3)))); //прямая (y0,yq)
+                    Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, dpen,
+                        new Point2f(XYcrds1[0][0], XYcrds1[0][1], new Pen(Brushes.Green, 3)),
+                        new Point2f(XYcrds1[1][0], XYcrds1[1][1], new Pen(Brushes.Green, 3))));
+                    Utilities.Boards[Utilities.Boards.Count - 1].AddElem(new Line(Utilities.Boards[0].Graphics, new Pen(Brushes.Black, 3),
+                        new Point2f(G[0][0], G[0][1]), new Point2f(G[1][0], G[1][1])));
+                    Utilities.Boards[Utilities.Boards.Count - 1].Draw(Utilities.Boards[0].cellsize);//прямая (y1,x1)
+                    Utilities.drawDone.Set();
+                    Thread.Sleep(1500);
+
                     x0 = x1;
                     y0 = y1;
                 }
                 else
                 {
+                    Utilities.Message("Множества линейно не разделимы");
+                    Utilities.drawing = false;
                     break;
                 }
                 if (!Utilities.multi)
@@ -125,6 +191,7 @@ namespace PatternRecognitionLib
         //Поиск Xp и Yq
         private void FindMaxPrs(ref vectorObject xp, ref vectorObject yq)
         {
+            Utilities.Message("Ищем одномерные симплексы");
             Pen dpen = new Pen(Brushes.Black, 2);
             dpen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash; //пунктирная линия
             
@@ -214,9 +281,10 @@ namespace PatternRecognitionLib
                 if (!Utilities.multi)
                 {
                     Utilities.nextStep.WaitOne();
-                    Utilities.nextStep.Reset();
+                    //Utilities.nextStep.Reset();
                 }
             }
+            Utilities.Message("");
         }
 
         //Вычисляем коэфициенты по т. Куна-Такера
@@ -320,6 +388,8 @@ namespace PatternRecognitionLib
         //Поиск гиперплоскости
         private vectorObject FindHyperplane(vectorObject x1, vectorObject y1)
         {
+            Utilities.Message("Ищем результирующий направляющий вектор W");
+            Thread.Sleep(1500);
             vectorObject _w = new vectorObject(x1.Size);
             _w = x1 - y1;
             return _w.Normalized();
@@ -328,6 +398,9 @@ namespace PatternRecognitionLib
         //Проверка является ли гиперплоскость разделяющей
         private bool IsRightPlane(vectorObject x1, vectorObject y1)
         {
+            Utilities.Message("Проверяем является ли правило разделяющим");
+            Thread.Sleep(1500);
+
             for (int i = 0; i < X.Count; i++)
             {
                 if ((W * X[i] - W * (x1 + y1) / 2) < 0)
@@ -341,37 +414,21 @@ namespace PatternRecognitionLib
             return true;
         }
 
-        //Не помню, что проверяет, но что-то проверяет..............
+        //Проверка, множеств на линейную разделимость
         private bool IsSeparating(double delta)
         {
+            Utilities.Message("Проверка множеств на резделимость");
+            Thread.Sleep(1500);
             return (W.Norm() > delta);
         }
         
         //Критерий останова
         private bool StoppingCriterion(vectorObject x1, vectorObject y1, double gamma)
         {
-            //vectorObject point = new vectorObject((x1[0] + y1[0]) / 2, (x1[1] + y1[1]) / 2);
-            //float A = y1[0] - x1[0];
-            //float B = y1[1] - x1[1];
-            //float C = -(A * point[0] + B * point[1]);
-            //double min = Math.Abs((A * X[0][0] + B * X[0][1] + C) / Math.Sqrt((A * A) - (B * B)));
-
+            Utilities.Message("Проверяем критерий останова");
+            Thread.Sleep(1500);
             double p = (x1-y1).Norm();
 
-            //for (int i = 1; i < X.Count; i++)
-            //{
-            //    if (Math.Abs((A * X[i][0] + B * X[i][1] + C) / Math.Sqrt((A*A) - (B*B))) < min)
-            //    {
-            //        min = Math.Abs((A * X[i][0] + B * X[i][1] + C) / Math.Sqrt((A * A) - (B * B)));
-            //    }
-            //}
-            //for (int i = 0; i < Y.Count; i++)
-            //{
-            //    if (Math.Abs((A * Y[i][0] + B * Y[i][1] + C) / Math.Sqrt((A * A) - (B * B))) < min)
-            //    {
-            //        min = Math.Abs((A * Y[i][0] + B * Y[i][1] + C) / Math.Sqrt((A * A) - (B * B)));
-            //    }
-            //}
             double min = Math.Abs((W * X[0]) / W.Norm());
             for (int i = 0; i < X.Count; i++)
             {

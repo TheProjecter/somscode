@@ -29,20 +29,16 @@ namespace UIProj
         {
             InitializeComponent();
 
-            OpenFileDialog of = new OpenFileDialog();
-            of.Title = "Выберите файл";
-            of.Filter = "PDF files|*.pdf";
-            if (of.ShowDialog() == DialogResult.OK)
-            {
-                this.axAcroPDF1.LoadFile(of.FileName);
-                this.axAcroPDF1.src = of.FileName;
+            string FileName = "C:/Users/Viacheslav/Documents/теория.pdf";
+                this.axAcroPDF1.LoadFile(FileName);
+                this.axAcroPDF1.src = FileName;
                 this.axAcroPDF1.setShowToolbar(false);
                 this.axAcroPDF1.setView("FitH");
                 this.axAcroPDF1.setLayoutMode("SinglePage");
                 this.axAcroPDF1.Show();
-            }
 
             gs = drawBox.CreateGraphics();
+            Utilities.MessageBox = messBox;
             Utilities.Boards.Add(new GraphicsBoard(drawBox.Width, drawBox.Height, gs));
             Utilities.Boards[0].Draw(cellsize);
         }
@@ -114,6 +110,7 @@ namespace UIProj
         }
         private void clearButton_Click(object sender, EventArgs e)
         {
+            Utilities.Message("");
             Utilities.drawing = false;
             Utilities.Boards.Clear();
             Utilities.Boards.Add(new GraphicsBoard(drawBox.Width, drawBox.Height, gs));
@@ -237,6 +234,7 @@ namespace UIProj
         private void nextButton_Click(object sender, EventArgs e)
         {
             Utilities.nextStep.Set();
+            Utilities.nextStep.Reset();
         }
     }
 }

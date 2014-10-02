@@ -32,6 +32,7 @@ namespace UIProj
         {
             gamma = Double.Parse(gammaBox.Text);
             delta = Double.Parse(omegaBox.Text);
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
