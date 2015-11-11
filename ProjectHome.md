@@ -1,0 +1,1 @@
+Trying to write a simple chat on c# using asynchronous sockets. Currently working within the local network. Next goal: to write a function scans the network to local customers did not request the server ip.
